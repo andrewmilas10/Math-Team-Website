@@ -1,0 +1,42 @@
+{% extends 'core/Nav_Bar_Layout.html' %}
+
+{% block content %}
+<div class="questions-container">
+    <h1 id="title">Practice Problems</h1>
+    <div class="questionList">
+        <img class="img-fluid" src="{{ question.questionPicture.url }}" width="1000" height="500">
+        <p class="left">Topic: {{ question.topic }}</p>
+        <p class="left">Difficulty: {{ question.difficulty }}</p>
+        <p class="left">Year: {{ question.year }}</p>
+        <p class="left">Grade: {{ question.grade }}</p>
+        <p class="left">Completed: {{ question.is_complete }} </p>
+        {% if submitbutton %}
+
+        {% elif not submitAnswerButton %}
+
+            {% if not question.is_complete %}
+                <form action="{% url 'core:detail' question.id %}" method="post" role="form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="input" name="answer" placeholder="Type Answer Here">
+                    <input type="submit" name="submitAnswer" value="Submit Answer" class="btn btn-blue"/>
+                </form>
+            {% endif%}
+
+        {% elif not submitbutton %}
+            {% if correctAnswer %}
+              <p>You are Correct</p>
+            {% else %}
+              <p>You are Incorrect</p>
+            {% endif %}
+
+      {% endif %}
+
+      {% if question.is_complete %}
+          <br>
+          <img class="img-fluid"src="{{ question.answerPicture.url }}" width="1000" height="500" id="answer">
+      {% endif %}
+
+   </div>
+</div>
+{% endblock %}

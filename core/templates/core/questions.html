@@ -1,0 +1,150 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Conant Math Team Updates</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/practice.css' %}">
+  <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="{% static 'js/script.js' %}"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+  <script>
+  var expanded = false;
+  var expanded2 = false;
+  var expanded3 = false;
+  function showCheckBoxes(){
+    var checkboxes = document.getElementById("checkboxes");
+    if(!expanded){
+      checkboxes.style.display="block";
+      expanded=true;
+    }
+    else{
+      checkboxes.style.display="none";
+      expanded=false;
+    }
+  }
+  function showCheckBoxes2(){
+    var checkboxes2 = document.getElementById("checkboxes2");
+    if(!expanded2){
+      checkboxes2.style.display="block";
+      expanded2=true;
+    }
+    else{
+      checkboxes2.style.display="none";
+      expanded2=false;
+    }
+  }
+  function showCheckBoxes3(){
+    var checkboxes3 = document.getElementById("checkboxes3");
+    if(!expanded3){
+      checkboxes3.style.display="block";
+      expanded3=true;
+    }
+    else{
+      checkboxes3.style.display="none";
+      expanded3=false;
+    }
+  }
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-expand navbar-light bg-light">
+    <span class="navbar-brand">Conant Math Team</span>
+    <div class="navbar-nav">
+          <a class="nav-link" href="{% url 'core:homepage' %}">Home<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{% url 'core:post_list' %}">Updates</a>
+        <a class="nav-link active" href="{% url 'core:question_list' %}">Practice Problems</a>
+        <a class="nav-link" href="{% url 'core:logout_user' %}">Logout</a>
+        <div id="name"class="nav navbar-nav navbar-right">
+          <h3 id="welcome">Welcome, {{ user.username }}</h3>
+        <div>
+    </div>
+
+  </nav>
+  <h1 id="title">Practice Problems</h1>
+  <div>
+    <form role="form" method="post" action="{% url 'core:question_list' %}">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <div class="multiselect">
+                  <div class="selectBox" onclick="showCheckBoxes()">
+                    <select class="selectpicker">
+                        <option>Select Topics</option>
+                    </select>
+                    <div class="overSelect"></div>
+                  </div>
+                    <div id="checkboxes">
+                      <input value="Ratios, Proportions and Percents" type="checkbox" name="Ratios, Proportions and Percents" />Ratios, Proportions and Percents<br>
+                      <input value="Number Theory and Divisibility" type="checkbox"name="Number Theory and Divisibility" />Number Theory and Divisibility<br>
+                      <input value="Counting Basics and Probability" type="checkbox"name="Counting Basics and Probability" />Counting Basics and Probability<br>
+                      <input value="Quadratics" type="checkbox" name="Quadratics" />Quadratics<br>
+                      <input value="Probability" type="checkbox" name="Probability" />Probability<br>
+                        <input value="Advanced Geometrical Concepts" type="checkbox" name="Advanced Geometrical Concepts" />Advanced Geometrical Concepts<br>
+                      <input value="Perimeter, Area and Surface Area" type="checkbox" name="Perimeter, Area and Surface Area" />Perimeter, Area and Surface Area<br>
+                        <input value="Logic, Sets and Venn Diagram" type="checkbox"name="Logic, Sets and Venn Diagram" />Logic, Sets and Venn Diagram<br>
+                      <input value="Similarity" type="checkbox"name="Similarity" />Similarity<br>
+                      <input value="Coordiante Geometry" type="checkbox" name="Coordiante Geometry" />Coordiante Geometry<br>
+                      <input value="Circles" type="checkbox" name="Circles" />Circles<br>
+                      <input value="Trigonometry" type="checkbox" name="Trigonometry" />Trigonometry<br>
+                        <input value="Parametric Equations" type="checkbox" name="Parametric Equations" />Parametric Equations<br>
+                        <input value="Theory of Equations" type="checkbox" name="Theory of Equations" />Theory of Equations<br>
+                    </div>
+
+            </div>
+
+            <div class="multiselect">
+                <div class="selectBox" onclick="showCheckBoxes2()">
+                  <select class="selectpicker">
+                      <option>Select Grade</option>
+                  </select>
+                  <div class="overSelect"></div>
+                </div>
+                  <div id="checkboxes2">
+                    <input value="Freshman" type="checkbox" name="Freshman">Freshman<br>
+                    <input value="Sophomore" type="checkbox" name="Sophomore">Sophomore<br>
+                    <input value="Junior" type="checkbox" name="Junior">Junior<br>
+                    <input value="Senior" type="checkbox" name="Senior">Senior<br>
+                  </div>
+
+          </div>
+          <div class="multiselect">
+              <div class="selectBox" onclick="showCheckBoxes3()">
+                <select class="selectpicker">
+                    <option>Select Difficulty</option>
+                </select>
+                <div class="overSelect"></div>
+              </div>
+                <div id="checkboxes3">
+                  <input value="1" type="checkbox" name="1">1<br>
+                  <input value="2" type="checkbox" name="2">2<br>
+                  <input value="3" type="checkbox" name="3">3<br>
+                  <input value="4" type="checkbox" name="4">4<br>
+                  <input value="5" type="checkbox" name="5">5<br>
+                </div>
+
+        </div>
+        <button type="submit" class="btn btn-blue" name="submit">Search</button>
+    </form>
+  <div >
+
+  {% if question_results %}
+  {% for question in question_results %}
+  <div class="questionList">
+    <a href="{% url 'core:detail' question.id %}">
+      <br>
+      <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
+      <p class="inlinep">Topic: {{ question.topic }}</p>
+      <p class="inlinep">Question Number: {{ question.difficulty }}</p>
+      <p class="inlinep">Year Created: {{ question.year }}</p>
+      <p class="inlinep">Grade: {{ question.grade }}</p>
+      <p class="inlinep">Completed: {{ question.is_complete }}</p>
+    </a>
+  </div>
+
+  {% endfor %}
+  {% endif %}
+<footer id="footer">©2018 Created by Nisha Pant and Andrew Milas</footer>
+</body>
+</html>

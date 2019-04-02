@@ -1,0 +1,96 @@
+body{
+  margin: 0;
+  padding: 0;
+  color: #004d66;
+  font-family: 'Roboto', sans-serif;
+  background-color: #63D1F4;
+}
+#name{
+  text-align: right;
+  margin-left: 200px;
+  margin-right: 15px;
+  margin-top: 7px;
+}
+#welcome{
+  font-size: 20px;
+}
+#footer {
+   position:relative;
+   bottom:0;
+   font-size: 15px;
+   text-align: right;
+   width:100%;
+   height:50px;   /* Height of the footer */
+   padding-right: 25px;
+}
+#title{
+  margin-top:30px;
+  font-weight: 400;
+  text-align: center;
+}
+.btn-blue {
+  color: #FFFFFF;
+  background-color: #004D66;
+  border-color: #004D66;
+  margin: 15px;
+  padding: 6px 8px 6px 8px;
+}
+
+.btn-blue:hover,
+.btn-blue:focus,
+.btn-blue:active,
+.btn-blue.active,
+.open .dropdown-toggle.btn-blue {
+  color: #FFFFFF;
+  background-color: #003547;
+  border-color: #004D66;
+}
+
+.btn-blue:active,
+.btn-blue.active,
+.open .dropdown-toggle.btn-blue {
+  background-image: none;
+}
+
+.btn-blue.disabled,
+.btn-blue[disabled],
+fieldset[disabled] .btn-blue,
+.btn-blue.disabled:hover,
+.btn-blue[disabled]:hover,
+fieldset[disabled] .btn-blue:hover,
+.btn-blue.disabled:focus,
+.btn-blue[disabled]:focus,
+fieldset[disabled] .btn-blue:focus,
+.btn-blue.disabled:active,
+.btn-blue[disabled]:active,
+fieldset[disabled] .btn-blue:active,
+.btn-blue.disabled.active,
+.btn-blue[disabled].active,
+fieldset[disabled] .btn-blue.active {
+  background-color: #004D66;
+  border-color: #004D66;
+}
+
+.btn-blue .badge {
+  color: #004D66;
+  background-color: #FFFFFF;
+}
+
+.questionList{
+  background-color: white;
+  text-align: center;
+  width: 75%;
+  margin: 18px auto;
+  border-radius: 10px;
+  padding-top:10px;
+  padding-bottom: 15px;
+  padding-left: 7px;
+  padding-right: 7px;
+}
+
+.left{
+  text-align: left;
+  margin-top: 6px;
+  margin-left: 50px;
+  font-size: 15px;
+}

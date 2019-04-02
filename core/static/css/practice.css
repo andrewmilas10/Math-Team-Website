@@ -1,0 +1,135 @@
+body{
+  margin: 0;
+  padding: 0;
+  color: #004d66;
+  font-family: 'Roboto', sans-serif;
+  background-color: #63D1F4;
+}
+#name{
+  text-align: right;
+  margin-left: 200px;
+  margin-right: 15px;
+  margin-top: 7px;
+}
+#welcome{
+  font-size: 20px;
+}
+#title{
+  margin-top:30px;
+  font-weight: 400;
+  text-align: center
+}
+
+#footer {
+   position:relative;
+   bottom: 0;
+   font-size: 15px;
+   text-align: right;
+   width:100%;
+   height:50px;   /* Height of the footer */
+   padding-right: 25px;
+}
+.multiselect{
+  width: 250px;
+  font-size: 15px;
+  font-weight: 400;
+  display: inline-block;
+  width: 300px;
+}
+
+.selectBox{
+  position: relative;
+  background-color: white;
+  border-radius: 5px;
+  margin-left: 8px;
+  padding: 3px;
+}
+
+.selectBox select{
+  width: 100%
+}
+.overSelect{
+  position: absolute;
+  left: 0;
+  right:0;
+  top: 0;
+  bottom: 0;
+}
+#checkboxes, #checkboxes3, #checkboxes2{
+  display: none;
+  background-color: white;
+  margin-top: 2px;
+  border-radius: 5px;
+  margin-left: 8px;
+  padding: 5px;
+}
+
+.btn-blue {
+  color: #FFFFFF;
+  background-color: #004D66;
+  border-color: #004D66;
+  margin: 15px;
+  padding: 8px 10px 8px 10px;
+}
+
+.btn-blue:hover,
+.btn-blue:focus,
+.btn-blue:active,
+.btn-blue.active,
+.open .dropdown-toggle.btn-blue {
+  color: #FFFFFF;
+  background-color: #003547;
+  border-color: #004D66;
+}
+
+.btn-blue:active,
+.btn-blue.active,
+.open .dropdown-toggle.btn-blue {
+  background-image: none;
+}
+
+.btn-blue.disabled,
+.btn-blue[disabled],
+fieldset[disabled] .btn-blue,
+.btn-blue.disabled:hover,
+.btn-blue[disabled]:hover,
+fieldset[disabled] .btn-blue:hover,
+.btn-blue.disabled:focus,
+.btn-blue[disabled]:focus,
+fieldset[disabled] .btn-blue:focus,
+.btn-blue.disabled:active,
+.btn-blue[disabled]:active,
+fieldset[disabled] .btn-blue:active,
+.btn-blue.disabled.active,
+.btn-blue[disabled].active,
+fieldset[disabled] .btn-blue.active {
+  background-color: #004D66;
+  border-color: #004D66;
+}
+
+.btn-blue .badge {
+  color: #004D66;
+  background-color: #FFFFFF;
+}
+#container{
+  position: relative;
+}
+.questionList{
+  background-color: white;
+  text-align: center;
+  width: 75%;
+  margin: 18px auto;
+  border-radius: 10px;
+}
+.questionList:hover + .inlinep{
+    color: black;
+}
+.inlinep{
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 15px;
+  color: #515151;
+}
+a{
+  text-decoration: none !important;
+}
