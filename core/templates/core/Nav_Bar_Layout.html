@@ -21,6 +21,7 @@
           <a class="nav-link active" href="{% url 'core:homepage' %}">Home<span class="sr-only">(current)</span></a>
           <a class="nav-link" href="{% url 'core:post_list' %}">Updates</a>
           <a class="nav-link" href="{% url 'core:question_list' %}">Practice Problems</a>
+          <a class="nav-link" href="{% url 'core:practice_topics' %}">Practice Topics</a>
           <a class="nav-link" href="{% url 'core:logout_user' %}">Logout</a>
           <div id="name"class="nav navbar-nav navbar-right">
             <h3 id="welcome">Welcome, {{ user.username }}</h3>

@@ -151,6 +151,33 @@ def login_user(request):
 def homepage(request):
     return render(request, 'core/homepage_logged_in.html', {})
 
+def practice_topics(request):
+    question = Question.objects.get(topic="Quadratics")
+    submitbutton = request.POST.get('submit')
+    submitAnswerButton = request.POST.get('submitAnswer')
+    correctAnswer = False
+    if submitbutton:
+        context = {
+            'submitbutton': submitbutton,
+            'question': question
+        }
+        return render(request, 'core/practice_topics.html', context)
+    elif submitAnswerButton:
+        input = request.POST.get('answer')
+        question.is_complete = True
+        question.save()
+        if input == question.answer:
+            correctAnswer = True
+        context = {
+            'submitAnswerButton': submitAnswerButton,
+            'question': question,
+            'correctAnswer': correctAnswer,
+        }
+        return render(request, 'core/practice_topics.html', context)
+    else:
+        return render(request, 'core/practice_topics.html', {'question': question})
+
+
 def questions(request, filter_by):
     if not request.user.is_authenticated():
         return render(request, 'core/login.html')

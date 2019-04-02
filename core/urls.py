@@ -15,6 +15,6 @@ urlpatterns = [
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^homepage$', views.homepage, name='homepage'),
     url(r'^questions/(?P<filter_by>[a-zA_Z]+)/$', views.questions, name='questions'),
-    
+    url(r'^practice_topics/$', views.practice_topics, name='practice_topics'),
 
 ]
