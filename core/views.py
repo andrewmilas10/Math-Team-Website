@@ -151,7 +151,10 @@ def login_user(request):
 def homepage(request):
     return render(request, 'core/homepage_logged_in.html', {})
 
+value = 50
+
 def practice_topics(request):
+    global value
     question = Question.objects.get(topic="Quadratics")
     submitbutton = request.POST.get('submit')
     submitAnswerButton = request.POST.get('submitAnswer')
@@ -168,14 +171,18 @@ def practice_topics(request):
         question.save()
         if input == question.answer:
             correctAnswer = True
+            value+=10
+        else:
+            value -= 10
         context = {
             'submitAnswerButton': submitAnswerButton,
             'question': question,
             'correctAnswer': correctAnswer,
+            'value': value,
         }
         return render(request, 'core/practice_topics.html', context)
     else:
-        return render(request, 'core/practice_topics.html', {'question': question})
+        return render(request, 'core/practice_topics.html', {'question': question, "value": 50})
 
 
 def questions(request, filter_by):

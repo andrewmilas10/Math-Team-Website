@@ -6,8 +6,8 @@
 <div class="questions-container">
     <div style="text-align: center">
         <h1 class = "inline" id="title">Ratios and Percents</h1>
-        <progress class = "inline" id="progressBar" value="50" max = "100" style="width: 300px; height:24px;"></progress>
-        <span class = "inline" id="status">50%</span>
+        <progress class = "inline" id="progressBar" value = {{ value }} max = "100" style="width: 300px; height:24px;"></progress>
+        <span class = "inline" id="status">{{ value }}%</span>
     </div>
     <div class="questionList">
         <img class="img-fluid" src="{{ question.questionPicture.url }}" width="1000" height="500">
@@ -25,20 +25,8 @@
 
         {% if correctAnswer %}
           <p>You are Correct</p>
-            <script>
-                var bar = document.getElementById("progressBar");
-                var status = document.getElementById("status");
-                bar.value+=10;
-                status.innerHTML = bar.value + "%";
-            </script>
         {% else %}
           <p>You are Incorrect</p>
-            <script>
-                var bar = document.getElementById("progressBar");
-                var status = document.getElementById("status");
-                bar.value-=10;
-                status.innerHTML = bar.value + "%";
-            </script>
         {% endif %}
 
 
