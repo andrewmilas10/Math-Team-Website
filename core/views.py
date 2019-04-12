@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Post
 from .models import Question
+from .models import Profile
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -22,7 +23,7 @@ def post_list(request):
 def question_list(request):
     topiclist = ['Ratios, Proportions and Percents','Number Theory and Divisibility','Counting Basics and Probability'
     , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
-    'Logic, Sets and Venn Diagram', 'Similarity', 'Coordiante Geometry', 'Circles', 'Trigonometry',
+    'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
     'Parametric Equations', 'Theory of Equations']
     grades = ['Freshman', 'Sophomore', 'Junior', 'Senior']
     questionNumbers= ['1','2','3','4','5']
@@ -115,12 +116,15 @@ class UserFormView(View):
             user.set_password(password)
             user.save()
 
+            Profile.objects.create(user=user, progress= 0)
+
             user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
                     login(request, user)
                     return render(request, 'core/homepage_logged_in.html', {})
         return render(request, 'core/registration_form.html', {'form': form, 'error_message': 'your username or email may already be registered. please choose another one'})
+
 
 #this function logs the user out of the page and returns the user back to the login page
 def logout_user(request):
@@ -151,11 +155,10 @@ def login_user(request):
 def homepage(request):
     return render(request, 'core/homepage_logged_in.html', {})
 
-value = 50
 
 def practice_topics(request):
-    global value
-    question = Question.objects.get(topic="Quadratics")
+    user = request.user
+    question = Question.objects.get(topic="Coordinate Geometry")
     submitbutton = request.POST.get('submit')
     submitAnswerButton = request.POST.get('submitAnswer')
     correctAnswer = False
@@ -171,18 +174,22 @@ def practice_topics(request):
         question.save()
         if input == question.answer:
             correctAnswer = True
-            value+=10
+            print(user.profile.progress)
+            user.profile.progress+=10
+            user.profile.save()
         else:
-            value -= 10
+            print(user.profile.progress)
+            user.profile.progress-=10
+            user.profile.save()
+
         context = {
             'submitAnswerButton': submitAnswerButton,
             'question': question,
             'correctAnswer': correctAnswer,
-            'value': value,
         }
         return render(request, 'core/practice_topics.html', context)
     else:
-        return render(request, 'core/practice_topics.html', {'question': question, "value": 50})
+        return render(request, 'core/practice_topics.html', {'question': question})
 
 
 def questions(request, filter_by):

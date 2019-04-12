@@ -4,6 +4,28 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    PROGRESS_OPTIONS = (
+        (0, 0),
+        (10, 10),
+        (20, 20),
+        (30, 30),
+        (40, 40),
+        (50, 50),
+        (60, 60),
+        (70, 70),
+        (80, 80),
+        (90, 90),
+        (100, 100)
+    )
+
+    progress = models.IntegerField(choices=PROGRESS_OPTIONS, default=0)
+
+    def __str__(self):
+        return self.user.username + " Profile"
+
 #this function handles all of the posts on the website. when an admin makes a new post, these are all of the
 #variables for each object
 class Post(models.Model):
@@ -41,7 +63,7 @@ class Question(models.Model):
         ('Perimeter, Area and Surface Area', 'Perimeter, Area and Surface Area'),
         ('Logic, Sets and Venn Diagram', 'Logic, Sets and Venn Diagram'),
         ('Similarity', 'Similarity'),
-        ('Coordiante Geometry', 'Coordiante Geometry'),
+        ('Coordinate Geometry', 'Coordinate Geometry'),
         ('Circles', 'Circles'),
         ('Trigonometry', 'Trigonometry'),
         ('Parametric Equations', 'Parametric Equations'),

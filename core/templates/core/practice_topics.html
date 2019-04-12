@@ -5,9 +5,9 @@
 
 <div class="questions-container">
     <div style="text-align: center">
-        <h1 class = "inline" id="title">Ratios and Percents</h1>
-        <progress class = "inline" id="progressBar" value = {{ value }} max = "100" style="width: 300px; height:24px;"></progress>
-        <span class = "inline" id="status">{{ value }}%</span>
+        <h1 class = "inline" id="title">Coordinate Geometry</h1>
+        <progress class = "inline" id="progressBar" value = {{ user.profile.progress }} max = "100" style="width: 300px; height:24px;"></progress>
+        <span class = "inline" id="status">{{ user.profile.progress }}%</span>
     </div>
     <div class="questionList">
         <img class="img-fluid" src="{{ question.questionPicture.url }}" width="1000" height="500">
