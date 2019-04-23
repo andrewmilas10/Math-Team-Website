@@ -7,6 +7,23 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    TOPIC_LIST = (
+        'Ratios, Proportions and Percents',
+        'Number Theory and Divisibility',
+        'Counting Basics and Probability',
+        'Quadratics',
+        'Probability',
+        'Advanced Geometrical Concepts',
+        'Perimeter, Area and Surface Area',
+        'Logic, Sets and Venn Diagram',
+        'Similarity',
+        'Coordinate Geometry',
+        'Circles',
+        'Trigonometry',
+        'Parametric Equations',
+        'Theory of Equations'
+    )
+
     PROGRESS_OPTIONS = (
         (0, 0),
         (10, 10),
@@ -22,6 +39,14 @@ class Profile(models.Model):
     )
 
     progress = models.IntegerField(choices=PROGRESS_OPTIONS, default=0)
+
+    topicDict = "{"
+    for topic in TOPIC_LIST:
+        topicDict+= "\"" + topic+"\": 0,"
+
+    topicDict = topicDict[:-1]+"}"
+    print(topicDict)
+    progress2 = models.CharField(max_length=1000, default=topicDict)
 
     def __str__(self):
         return self.user.username + " Profile"

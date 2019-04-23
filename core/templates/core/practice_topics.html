@@ -3,35 +3,20 @@
 
 {% block content %}
 
-<div class="questions-container">
-    <div style="text-align: center">
-        <h1 class = "inline" id="title">Coordinate Geometry</h1>
-        <progress class = "inline" id="progressBar" value = {{ user.profile.progress }} max = "100" style="width: 300px; height:24px;"></progress>
-        <span class = "inline" id="status">{{ user.profile.progress }}%</span>
-    </div>
-    <div class="questionList">
-        <img class="img-fluid" src="{{ question.questionPicture.url }}" width="1000" height="500">
-        <p class="left">Topic: {{ question.topic }}</p>
-        <p class="left">Difficulty: {{ question.difficulty }}</p>
-        <p class="left">Year: {{ question.year }}</p>
-        <p class="left">Grade: {{ question.grade }}</p>
+<h1 class = "banner" id="title">Practice Topics</h1>
+<br>
 
-        <form action="{% url 'core:practice_topics' %}" method="post" role="form">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="input" name="answer" placeholder="Type Answer Here">
-            <input type="submit" name="submitAnswer" value="Submit Answer" class="btn btn-blue"/>
-        </form>
+{% for key, value in progress.items %}
+  <div class="questionList">
+    <br>
+    <a href="{% url 'core:practice_topics_detail' key%}">
+      <p class="inlinep">Topic: {{ key }}</p>
+      <progress class = "inline" id="progressBar" value = {{ value }} max = "100" style="width: 300px; height:24px;"></progress>
+      <span class = "inline" id="status">{{  value }}%</span>
+    </a>
+  </div>
+{% endfor %}
 
-        {% if correctAnswer %}
-          <p>You are Correct</p>
-        {% else %}
-          <p>You are Incorrect</p>
-        {% endif %}
-
-
-   </div>
-</div>
 {% endblock %}
 
 

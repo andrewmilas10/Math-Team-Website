@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from .forms import UserForm
+import json
 from django.http import JsonResponse
 from django.db.models import Q
 
@@ -15,7 +16,9 @@ def index(request):
     return render(request, 'core/index.html', {})
 
 def post_list(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    posts = Post.objects.all().order_by('published_date')
+    print(posts.count())
     return render(request, 'core/post_list.html', {'posts': posts})
 
 #this is the function that is loaded when the list of questions is called, it also works on the search functionality of the
@@ -157,17 +160,65 @@ def homepage(request):
 
 
 def practice_topics(request):
+    topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
+        , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
+                 'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
+                 'Parametric Equations', 'Theory of Equations']
     user = request.user
-    question = Question.objects.get(topic="Coordinate Geometry")
+    progressDict = json.loads(user.profile.progress2)
+
+    return render(request, 'core/practice_topics.html', {'progress': progressDict, 'topics': topiclist})
+    # user = request.user
+    # question = Question.objects.get(topic="Coordinate Geometry")
+    # submitbutton = request.POST.get('submit')
+    # submitAnswerButton = request.POST.get('submitAnswer')
+    # correctAnswer = False
+    # if submitbutton:
+    #     context = {
+    #         'submitbutton': submitbutton,
+    #         'question': question
+    #     }
+    #     return render(request, 'core/practice_topics.html', context)
+    # elif submitAnswerButton:
+    #     input = request.POST.get('answer')
+    #     question.is_complete = True
+    #     question.save()
+    #     if input == question.answer:
+    #         correctAnswer = True
+    #         print(user.profile.progress)
+    #         user.profile.progress+=10
+    #         user.profile.save()
+    #     else:
+    #         print(user.profile.progress)
+    #         user.profile.progress-=10
+    #         user.profile.save()
+    #
+    #     context = {
+    #         'submitAnswerButton': submitAnswerButton,
+    #         'question': question,
+    #         'correctAnswer': correctAnswer,
+    #     }
+    #     return render(request, 'core/practice_topics.html', context)
+    # else:
+    #     return render(request, 'core/practice_topics.html', {'question': question})
+
+def practice_topics_detail(request, topic):
+    print(topic)
+    user = request.user
+    print(user.profile.progress2)
+    progressDict = json.loads(user.profile.progress2)
+    question = Question.objects.get(topic=topic)
     submitbutton = request.POST.get('submit')
     submitAnswerButton = request.POST.get('submitAnswer')
     correctAnswer = False
     if submitbutton:
         context = {
+            'progress2': progressDict[topic],
+            'topic': topic,
             'submitbutton': submitbutton,
             'question': question
         }
-        return render(request, 'core/practice_topics.html', context)
+        return render(request, 'core/practice_topics_detail.html', context)
     elif submitAnswerButton:
         input = request.POST.get('answer')
         question.is_complete = True
@@ -177,19 +228,26 @@ def practice_topics(request):
             print(user.profile.progress)
             user.profile.progress+=10
             user.profile.save()
+            progressDict[topic] += 10
+            user.profile.progress2 = json.dumps(progressDict)
+            user.profile.save()
         else:
             print(user.profile.progress)
             user.profile.progress-=10
+            progressDict[topic] -= 10
+            user.profile.progress2 = json.dumps(progressDict)
             user.profile.save()
 
         context = {
+            'progress2': progressDict[topic],
+            'topic': topic,
             'submitAnswerButton': submitAnswerButton,
             'question': question,
             'correctAnswer': correctAnswer,
         }
-        return render(request, 'core/practice_topics.html', context)
+        return render(request, 'core/practice_topics_detail.html', context)
     else:
-        return render(request, 'core/practice_topics.html', {'question': question})
+        return render(request, 'core/practice_topics_detail.html', {'progress2': progressDict[topic],'topic': topic, 'question': question})
 
 
 def questions(request, filter_by):

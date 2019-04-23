@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'^homepage$', views.homepage, name='homepage'),
     url(r'^questions/(?P<filter_by>[a-zA_Z]+)/$', views.questions, name='questions'),
     url(r'^practice_topics/$', views.practice_topics, name='practice_topics'),
+    url(r'^practice_topics_detail/(?P<topic>[a-zA-Z0-9, -]+)/$', views.practice_topics_detail, name='practice_topics_detail')
 
 ]
