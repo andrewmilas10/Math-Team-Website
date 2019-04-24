@@ -127,9 +127,27 @@ fieldset[disabled] .btn-blue.active {
 .inlinep{
   display: inline-block;
   margin-left: 10px;
-  font-size: 15px;
+  font-size: 20px;
   color: #515151;
 }
 a{
   text-decoration: none !important;
+}
+
+progress[value] {
+	height: 15px;
+	border: 0px none;
+	/*background-color: grey;*/
+	color: red;
+}
+
+progress::-webkit-progress-bar {
+	/*background-color: grey;*/
+}
+progress::-webkit-progress-value {
+	background-color: red;
+}
+
+progress::-moz-progress-bar {
+	background-color: red;
 }

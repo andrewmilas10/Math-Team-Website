@@ -1,12 +1,27 @@
 
 {% extends 'core/Nav_Bar_Layout.html' %}
+<style>
+    progress[value] {
+  border-radius: 20px;
+}
+progress[value]::-webkit-progress-bar {
+  border-radius: 20px;
+}
+progress[value]::-webkit-progress-value {
+  border-radius: 20px;
+}
+progress[value]::-moz-progress-bar {
+  border-radius: 20px;
+}
 
+
+</style>
 {% block content %}
 
 <div class="questions-container">
     <div style="text-align: center">
         <h1 class = "inline" id="title">{{ topic }}</h1>
-        <progress class = "inline" id="progressBar" value = {{ progress2 }} max = "100" style="width: 300px; height:24px;"></progress>
+        <progress class = "inline" id="progressBar" value = {{ progress2 }} max="100" style="width: 300px; height:24px; color: {{ color }}"></progress>
         <span class = "inline" id="status">{{ progress2 }}%</span>
     </div>
     <div class="questionList">

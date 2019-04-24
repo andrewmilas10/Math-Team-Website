@@ -8,6 +8,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from .forms import UserForm
 import json
+import operator
+import random
 from django.http import JsonResponse
 from django.db.models import Q
 
@@ -158,6 +160,15 @@ def login_user(request):
 def homepage(request):
     return render(request, 'core/homepage_logged_in.html', {})
 
+def pickColor(progress):
+    if progress >= 90:
+        return "blue"
+    elif progress >= 70:
+        return "green"
+    elif progress >= 30:
+        return "orange"
+    else:
+        return "red"
 
 def practice_topics(request):
     topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
@@ -166,54 +177,37 @@ def practice_topics(request):
                  'Parametric Equations', 'Theory of Equations']
     user = request.user
     progressDict = json.loads(user.profile.progress2)
+    progress = []
+    for num in reversed(sorted(progressDict.items(), key=operator.itemgetter(1))):
+        progress.append([num[0], num[1], pickColor(num[1])])
 
-    return render(request, 'core/practice_topics.html', {'progress': progressDict, 'topics': topiclist})
-    # user = request.user
-    # question = Question.objects.get(topic="Coordinate Geometry")
-    # submitbutton = request.POST.get('submit')
-    # submitAnswerButton = request.POST.get('submitAnswer')
-    # correctAnswer = False
-    # if submitbutton:
-    #     context = {
-    #         'submitbutton': submitbutton,
-    #         'question': question
-    #     }
-    #     return render(request, 'core/practice_topics.html', context)
-    # elif submitAnswerButton:
-    #     input = request.POST.get('answer')
-    #     question.is_complete = True
-    #     question.save()
-    #     if input == question.answer:
-    #         correctAnswer = True
-    #         print(user.profile.progress)
-    #         user.profile.progress+=10
-    #         user.profile.save()
-    #     else:
-    #         print(user.profile.progress)
-    #         user.profile.progress-=10
-    #         user.profile.save()
-    #
-    #     context = {
-    #         'submitAnswerButton': submitAnswerButton,
-    #         'question': question,
-    #         'correctAnswer': correctAnswer,
-    #     }
-    #     return render(request, 'core/practice_topics.html', context)
-    # else:
-    #     return render(request, 'core/practice_topics.html', {'question': question})
+    return render(request, 'core/practice_topics.html', {'progress': progress, 'topics': topiclist})
 
+def pickQuestion(topic):
+    possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic)
+    if not possQuestions.exists():
+        totalPoss = Question.objects.filter(topic=topic)
+        for poss in totalPoss:
+            poss.is_complete = False
+            poss.save()
+        possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic)
+
+    return random.choice(possQuestions)
+
+pastQuestion = "Null"
 def practice_topics_detail(request, topic):
-    print(topic)
+    global pastQuestion
     user = request.user
-    print(user.profile.progress2)
     progressDict = json.loads(user.profile.progress2)
-    question = Question.objects.get(topic=topic)
     submitbutton = request.POST.get('submit')
     submitAnswerButton = request.POST.get('submitAnswer')
     correctAnswer = False
+    question = pickQuestion(topic)
     if submitbutton:
+        pastQuestion = question
         context = {
             'progress2': progressDict[topic],
+            'color': pickColor(progressDict[topic]),
             'topic': topic,
             'submitbutton': submitbutton,
             'question': question
@@ -221,25 +215,23 @@ def practice_topics_detail(request, topic):
         return render(request, 'core/practice_topics_detail.html', context)
     elif submitAnswerButton:
         input = request.POST.get('answer')
-        question.is_complete = True
-        question.save()
-        if input == question.answer:
+        pastQuestion.is_complete = True
+        pastQuestion.save()
+        print(input, pastQuestion.answer, input==pastQuestion.answer)
+        if input == pastQuestion.answer:
             correctAnswer = True
-            print(user.profile.progress)
-            user.profile.progress+=10
-            user.profile.save()
             progressDict[topic] += 10
             user.profile.progress2 = json.dumps(progressDict)
             user.profile.save()
         else:
-            print(user.profile.progress)
-            user.profile.progress-=10
             progressDict[topic] -= 10
             user.profile.progress2 = json.dumps(progressDict)
             user.profile.save()
 
+        pastQuestion = question
         context = {
             'progress2': progressDict[topic],
+            'color': pickColor(progressDict[topic]),
             'topic': topic,
             'submitAnswerButton': submitAnswerButton,
             'question': question,
@@ -247,7 +239,8 @@ def practice_topics_detail(request, topic):
         }
         return render(request, 'core/practice_topics_detail.html', context)
     else:
-        return render(request, 'core/practice_topics_detail.html', {'progress2': progressDict[topic],'topic': topic, 'question': question})
+        pastQuestion = question
+        return render(request, 'core/practice_topics_detail.html', {'progress2': progressDict[topic],'color': pickColor(progressDict[topic]),'topic': topic, 'question': question})
 
 
 def questions(request, filter_by):
