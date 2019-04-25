@@ -162,13 +162,13 @@ def homepage(request):
 
 def pickColor(progress):
     if progress >= 90:
-        return "blue"
+        return "progress-bar progress-bar-striped"
     elif progress >= 70:
-        return "green"
+        return "progress-bar-striped bg-success"
     elif progress >= 30:
-        return "orange"
+        return "progress-bar-striped bg-warning"
     else:
-        return "red"
+        return "progress-bar-striped bg-danger"
 
 def practice_topics(request):
     topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
@@ -217,14 +217,18 @@ def practice_topics_detail(request, topic):
         input = request.POST.get('answer')
         pastQuestion.is_complete = True
         pastQuestion.save()
-        print(input, pastQuestion.answer, input==pastQuestion.answer)
-        if input == pastQuestion.answer:
+        print(input, pastQuestion.answer, pastQuestion.answer.split("@"), input in pastQuestion.answer.split("@"))
+        if input.replace(" ", "") in pastQuestion.answer.replace(" ", "").split("@"):
             correctAnswer = True
             progressDict[topic] += 10
+            if (progressDict[topic]) > 100:
+                progressDict[topic] = 100
             user.profile.progress2 = json.dumps(progressDict)
             user.profile.save()
         else:
             progressDict[topic] -= 10
+            if (progressDict[topic]) < 0:
+                progressDict[topic] = 0
             user.profile.progress2 = json.dumps(progressDict)
             user.profile.save()
 

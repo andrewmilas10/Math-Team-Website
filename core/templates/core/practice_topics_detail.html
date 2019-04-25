@@ -1,28 +1,17 @@
 
 {% extends 'core/Nav_Bar_Layout.html' %}
-<style>
-    progress[value] {
-  border-radius: 20px;
-}
-progress[value]::-webkit-progress-bar {
-  border-radius: 20px;
-}
-progress[value]::-webkit-progress-value {
-  border-radius: 20px;
-}
-progress[value]::-moz-progress-bar {
-  border-radius: 20px;
-}
-
-
-</style>
 {% block content %}
 
 <div class="questions-container">
     <div style="text-align: center">
-        <h1 class = "inline" id="title">{{ topic }}</h1>
-        <progress class = "inline" id="progressBar" value = {{ progress2 }} max="100" style="width: 300px; height:24px; color: {{ color }}"></progress>
-        <span class = "inline" id="status">{{ progress2 }}%</span>
+        <div class="flex-container">
+            <h1 id="title" style="margin-top: 0px">{{ topic }}</h1>
+            <div class="progress" style="width: 250px;  height: 33px">
+                <div class="{{ color }}" style="width:{{ progress2 }}%"></div>
+            </div>
+            <span id="status" style="font-size: 25px">{{ progress2 }}%</span>
+        </div>
+
     </div>
     <div class="questionList">
         <img class="img-fluid" src="{{ question.questionPicture.url }}" width="1000" height="500">
@@ -30,6 +19,7 @@ progress[value]::-moz-progress-bar {
         <p class="left">Difficulty: {{ question.difficulty }}</p>
         <p class="left">Year: {{ question.year }}</p>
         <p class="left">Grade: {{ question.grade }}</p>
+        <p class="left">Answer: {{ question.answer }}</p>
 
         <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
             {% csrf_token %}

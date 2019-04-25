@@ -11,8 +11,10 @@
     <br>
     <a href="{% url 'core:practice_topics_detail' key%}">
       <p class="inlinep">Topic: {{ key }}</p>
-      <progress class = "inline" id="progressBar" value = {{ value }} max="100" style="color: {{ color }}"></progress>
-      <span class = "inline" id="status">{{  value }}%</span>
+        <div class="progress" style="width: 75%; margin: auto">
+            <div class="{{ color }}" style="width:{{ value }}%"></div>
+        </div><br>
+      <span class = "inline" style="font-size: 20px" id="status">{{  value }}%</span>
     </a>
   </div>
 {% endfor %}

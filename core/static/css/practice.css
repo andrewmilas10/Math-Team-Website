@@ -134,20 +134,14 @@ a{
   text-decoration: none !important;
 }
 
-progress[value] {
-	height: 15px;
-	border: 0px none;
-	/*background-color: grey;*/
-	color: red;
+.flex-container {
+  margin-top: 20px;
+  display: flex;
+  height: 70px;
+  align-items: center;
+  justify-content: center
 }
 
-progress::-webkit-progress-bar {
-	/*background-color: grey;*/
-}
-progress::-webkit-progress-value {
-	background-color: red;
-}
-
-progress::-moz-progress-bar {
-	background-color: red;
+.flex-container > div {
+  margin: 20px;
 }
