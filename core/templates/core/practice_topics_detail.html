@@ -21,17 +21,38 @@
         <p class="left">Grade: {{ question.grade }}</p>
         <p class="left">Answer: {{ question.answer }}</p>
 
-        <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
+        {% if showSolutionButton %}
+            <img class="img-fluid"src="{{ question.answerPicture.url }}" width="1000" height="500">
+            <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
+            {% csrf_token %}
+            <input type="submit" name="nextQuestion" value="Next Question" class="btn btn-blue"/>
+            </form>
+
+        {% elif correctAnswer %}
+            <p>You are Correct</p>
+            <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
+            {% csrf_token %}
+            <input type="submit" name="nextQuestion" value="Next Question" class="btn btn-blue"/>
+            <input type="submit" name="showSolution" value="Show Solution" class="btn btn-blue"/>
+            </form>
+
+        {% elif attempts != 0 %}
+            <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
             {% csrf_token %}
             {{ form.as_p }}
             <input type="input" name="answer" placeholder="Type Answer Here">
             <input type="submit" name="submitAnswer" value="Submit Answer" class="btn btn-blue"/>
-        </form>
+            </form>
+            <p>You have {{ attempts }} attempts remaining</p>
 
-        {% if correctAnswer %}
-          <p>You are Correct</p>
         {% else %}
-          <p>You are Incorrect</p>
+            <p>You are Incorrect</p>
+            <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
+            {% csrf_token %}
+            <input type="submit" name="nextQuestion" value="Next Question" class="btn btn-blue"/>
+            <input type="submit" name="showSolution" value="Show Solution" class="btn btn-blue"/>
+            </form>
+
         {% endif %}
 
 

@@ -194,57 +194,74 @@ def pickQuestion(topic):
 
     return random.choice(possQuestions)
 
-pastQuestion = "Null"
 def practice_topics_detail(request, topic):
-    global pastQuestion
     user = request.user
     progressDict = json.loads(user.profile.progress2)
-    submitbutton = request.POST.get('submit')
+    attemptsDict = json.loads(user.profile.attempts)
+    currCorrectDict = json.loads(user.profile.currCorrect)
+
+    questionsIDsDict = json.loads(user.profile.currQuestions)
+    if (questionsIDsDict[topic] == "N"):
+        pastQuestion = pickQuestion(topic)
+        user.profile.currQuestions = json.dumps(questionsIDsDict)
+        user.profile.save()
+    else:
+        pastQuestion = Question.objects.get(id = questionsIDsDict[topic])
+
     submitAnswerButton = request.POST.get('submitAnswer')
+    nextQuestionButton = request.POST.get('nextQuestion')
+    showSolutionButton = request.POST.get('showSolution')
     correctAnswer = False
-    question = pickQuestion(topic)
-    if submitbutton:
-        pastQuestion = question
-        context = {
+
+    def getContext():
+        return {
             'progress2': progressDict[topic],
+            'attempts': attemptsDict[topic],
             'color': pickColor(progressDict[topic]),
             'topic': topic,
-            'submitbutton': submitbutton,
-            'question': question
+            'showSolutionButton': showSolutionButton,
+            'question': pastQuestion,
+            'correctAnswer': correctAnswer,
         }
-        return render(request, 'core/practice_topics_detail.html', context)
+
+    if showSolutionButton:
+        return render(request, 'core/practice_topics_detail.html', getContext())
+    elif nextQuestionButton and (currCorrectDict[topic] == "T" or attemptsDict[topic]==0):
+        attemptsDict[topic] = 3
+        currCorrectDict[topic] = "F"
+        user.profile.attempts = json.dumps(attemptsDict)
+        user.profile.currCorrect = json.dumps(currCorrectDict)
+        pastQuestion = pickQuestion(topic)
+        questionsIDsDict[topic] = pastQuestion.id
+        user.profile.currQuestions = json.dumps(questionsIDsDict)
+        user.profile.save()
+        return render(request, 'core/practice_topics_detail.html', getContext())
+    elif currCorrectDict[topic] == "T":
+        correctAnswer = True
+        return render(request, 'core/practice_topics_detail.html', getContext())
     elif submitAnswerButton:
         input = request.POST.get('answer')
-        pastQuestion.is_complete = True
-        pastQuestion.save()
-        print(input, pastQuestion.answer, pastQuestion.answer.split("@"), input in pastQuestion.answer.split("@"))
         if input.replace(" ", "") in pastQuestion.answer.replace(" ", "").split("@"):
             correctAnswer = True
             progressDict[topic] += 10
             if (progressDict[topic]) > 100:
                 progressDict[topic] = 100
+            currCorrectDict[topic] = "T"
             user.profile.progress2 = json.dumps(progressDict)
+            user.profile.currCorrect = json.dumps(currCorrectDict)
             user.profile.save()
         else:
-            progressDict[topic] -= 10
+            attemptsDict[topic] -= 1
+            if attemptsDict[topic] == 0:
+                progressDict[topic]-=15
             if (progressDict[topic]) < 0:
                 progressDict[topic] = 0
             user.profile.progress2 = json.dumps(progressDict)
+            user.profile.attempts = json.dumps(attemptsDict)
             user.profile.save()
-
-        pastQuestion = question
-        context = {
-            'progress2': progressDict[topic],
-            'color': pickColor(progressDict[topic]),
-            'topic': topic,
-            'submitAnswerButton': submitAnswerButton,
-            'question': question,
-            'correctAnswer': correctAnswer,
-        }
-        return render(request, 'core/practice_topics_detail.html', context)
+        return render(request, 'core/practice_topics_detail.html', getContext())
     else:
-        pastQuestion = question
-        return render(request, 'core/practice_topics_detail.html', {'progress2': progressDict[topic],'color': pickColor(progressDict[topic]),'topic': topic, 'question': question})
+        return render(request, 'core/practice_topics_detail.html', getContext())
 
 
 def questions(request, filter_by):
