@@ -21,7 +21,7 @@ def post_list(request):
     # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     posts = Post.objects.all().order_by('published_date')
     print(posts.count())
-    return render(request, 'core/post_list.html', {'posts': posts})
+    return render(request, 'core/post_list.html', {'posts': posts, "activeNav": "1"})
 
 #this is the function that is loaded when the list of questions is called, it also works on the search functionality of the
 #website by finding the questions under the filter with a serach query
@@ -62,13 +62,10 @@ def question_list(request):
                 question_results = question_results.filter(grade__in=gradesSearched)
             if numberSearched:
                 question_results = question_results.filter(difficulty__in=numberSearched)
-            return render(request, 'core/questions.html', {
-                        'questions': questions,
-                        'question_results': question_results,
-                    })
+            return render(request, 'core/questions.html', {'questions': questions,'question_results': question_results, "activeNav": "2"})
 
 
-        return render(request, 'core/question_list.html', {'questions': questions})
+        return render(request, 'core/question_list.html', {'questions': questions,"activeNav": "2"})
 
 
 
@@ -83,7 +80,8 @@ def detail(request, question_id):
     if submitbutton:
         context={
         'submitbutton': submitbutton,
-        'question': question
+        'question': question,
+        "activeNav": "2"
         }
         return render(request, 'core/question_detail.html', context)
     elif submitAnswerButton:
@@ -96,10 +94,11 @@ def detail(request, question_id):
             'submitAnswerButton': submitAnswerButton,
             'question': question,
             'correctAnswer': correctAnswer,
+            "activeNav": "2"
         }
         return render(request, 'core/question_detail.html', context)
     else:
-        return render(request, 'core/question_detail.html', {'question': question})
+        return render(request, 'core/question_detail.html', {'question': question, "activeNav": "0"})
 
 
 #this function handles the creating of a new user
@@ -127,7 +126,7 @@ class UserFormView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render(request, 'core/homepage_logged_in.html', {})
+                    return render(request, 'core/homepage_logged_in.html', {"activeNav": "0"})
         return render(request, 'core/registration_form.html', {'form': form, 'error_message': 'your username or email may already be registered. please choose another one'})
 
 
@@ -150,7 +149,7 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 questions = Question.objects.all()
-                return render(request, 'core/homepage_logged_in.html', {'questions': questions})
+                return render(request, 'core/homepage_logged_in.html', {'questions': questions, "activeNav": "0"})
             else:
                 return render(request, 'core/login.html', {'error_message': 'Your account has been disabled'})
         else:
@@ -158,7 +157,7 @@ def login_user(request):
     return render(request, 'core/login.html')
 
 def homepage(request):
-    return render(request, 'core/homepage_logged_in.html', {})
+    return render(request, 'core/homepage_logged_in.html', {"activeNav": "0"})
 
 def pickColor(progress):
     if progress >= 90:
@@ -181,7 +180,7 @@ def practice_topics(request):
     for num in reversed(sorted(progressDict.items(), key=operator.itemgetter(1))):
         progress.append([num[0], num[1], pickColor(num[1])])
 
-    return render(request, 'core/practice_topics.html', {'progress': progress, 'topics': topiclist})
+    return render(request, 'core/practice_topics.html', {'progress': progress, 'topics': topiclist, "activeNav": "3"})
 
 def pickQuestion(topic):
     possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic)
@@ -222,6 +221,7 @@ def practice_topics_detail(request, topic):
             'showSolutionButton': showSolutionButton,
             'question': pastQuestion,
             'correctAnswer': correctAnswer,
+            "activeNav": "3"
         }
 
     if showSolutionButton:
@@ -278,4 +278,5 @@ def questions(request, filter_by):
         return render(request, 'core/questions.html', {
             'question_list': users_questions,
             'filter_by': filter_by,
+            "activeNav": "2"
         })
