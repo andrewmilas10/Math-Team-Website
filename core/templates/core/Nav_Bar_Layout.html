@@ -17,8 +17,9 @@
 </head>
 <body>
   <nav class="navbar navbar-expand navbar-light bg-light">
-    <span class="navbar-brand">Conant Math Team</span>
+
     <div class="navbar-nav">
+          <span class="navbar-brand">Conant Math Team</span>
           <a {% ifequal activeNav "0" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:homepage' %}">Home<span class="sr-only">(current)</span></a>
           <a {% ifequal activeNav "1" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:post_list' %}">Updates</a>
           <a {% ifequal activeNav "2" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:question_list' %}">Practice Problems</a>
@@ -28,9 +29,10 @@
               <i class="fa fa-caret-down"></i>
             </p>
             <div class="dropdown-content">
-              <a href="{% url 'core:practice_topics' %}">Freshman</a>
-              <a href="{% url 'core:practice_topics' %}">Sophomore</a>
-              <a href="{% url 'core:practice_topics' %}">Junior</a>
+              <a href="{% url 'core:practice_topics' 0%}">Freshman</a>
+              <a href="{% url 'core:practice_topics' 1%}">Sophomore</a>
+              <a href="{% url 'core:practice_topics' 2%}">Junior</a>
+              <a href="{% url 'core:practice_topics' 3%}">Senior</a>
             </div>
           </div>
           <a {% ifequal activeNav "4" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:logout_user' %}">Logout</a>

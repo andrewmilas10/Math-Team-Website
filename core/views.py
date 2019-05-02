@@ -169,16 +169,29 @@ def pickColor(progress):
     else:
         return "progress-bar-striped bg-danger"
 
-def practice_topics(request):
-    topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
-        , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
-                 'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
-                 'Parametric Equations', 'Theory of Equations']
+def practice_topics(request, grade):
+    # topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
+    #     , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
+    #              'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
+    #              'Parametric Equations', 'Theory of Equations']
+    print(grade)
+    if grade == "0":
+        topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility',
+                     'Counting Basics and Probability', 'Quadratics']
+    elif grade == "1":
+        topiclist = ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
+                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles']
+    elif grade == "2":
+        topiclist = ['Probability', 'Coordinate Geometry', 'Trigonometry']
+    else:
+        topiclist = ['Trigonometry', 'Parametric Equations', 'Theory of Equations']
+    print(topiclist)
     user = request.user
     progressDict = json.loads(user.profile.progress2)
     progress = []
     for num in reversed(sorted(progressDict.items(), key=operator.itemgetter(1))):
-        progress.append([num[0], num[1], pickColor(num[1])])
+        if (num[0] in topiclist):
+            progress.append([num[0], num[1], pickColor(num[1])])
 
     return render(request, 'core/practice_topics.html', {'progress': progress, 'topics': topiclist, "activeNav": "3"})
 
