@@ -169,22 +169,33 @@ def pickColor(progress):
     else:
         return "progress-bar-striped bg-danger"
 
-def practice_topics(request, grade):
+activeNav = 3;
+def practice_topics(request, category, title):
     # topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
     #     , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
     #              'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
     #              'Parametric Equations', 'Theory of Equations']
-    print(grade)
-    if grade == "0":
+    global activeNav;
+    if category == "0":
+        activeNav = 3;
         topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility',
                      'Counting Basics and Probability', 'Quadratics']
-    elif grade == "1":
+    elif category == "1":
+        activeNav = 3;
         topiclist = ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
                      'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles']
-    elif grade == "2":
+    elif category == "2":
+        activeNav = 3;
         topiclist = ['Probability', 'Coordinate Geometry', 'Trigonometry']
-    else:
+    elif category == "3":
+        activeNav = 3;
         topiclist = ['Trigonometry', 'Parametric Equations', 'Theory of Equations']
+    elif category == "4":
+        activeNav = 4;
+        topiclist = ["Piggeee"]
+    else:
+        activeNav = 4;
+        topiclist = ["Piggeee"]
     print(topiclist)
     user = request.user
     progressDict = json.loads(user.profile.progress2)
@@ -193,7 +204,7 @@ def practice_topics(request, grade):
         if (num[0] in topiclist):
             progress.append([num[0], num[1], pickColor(num[1])])
 
-    return render(request, 'core/practice_topics.html', {'progress': progress, 'topics': topiclist, "activeNav": "3"})
+    return render(request, 'core/practice_topics.html', {'title': title, 'progress': progress, 'topics': topiclist, "activeNav": activeNav})
 
 def pickQuestion(topic):
     possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic)
@@ -207,6 +218,7 @@ def pickQuestion(topic):
     return random.choice(possQuestions)
 
 def practice_topics_detail(request, topic):
+    global activeNav;
     user = request.user
     progressDict = json.loads(user.profile.progress2)
     attemptsDict = json.loads(user.profile.attempts)
@@ -234,7 +246,7 @@ def practice_topics_detail(request, topic):
             'showSolutionButton': showSolutionButton,
             'question': pastQuestion,
             'correctAnswer': correctAnswer,
-            "activeNav": "3"
+            "activeNav": activeNav
         }
 
     if showSolutionButton:

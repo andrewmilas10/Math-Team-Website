@@ -25,15 +25,27 @@
           <a {% ifequal activeNav "2" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:question_list' %}">Practice Problems</a>
 {#          <a {% ifequal activeNav "3" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:practice_topics' %}">Practice Topics</a>#}
           <div class="dropdown">
-            <p {% ifequal activeNav "3" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %}>Practice Topics
+            <p {% ifequal activeNav "3" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %}>Practice NSML
               <i class="fa fa-caret-down"></i>
             </p>
             <div class="dropdown-content">
-              <a href="{% url 'core:practice_topics' 0%}">Freshman</a>
-              <a href="{% url 'core:practice_topics' 1%}">Sophomore</a>
-              <a href="{% url 'core:practice_topics' 2%}">Junior</a>
-              <a href="{% url 'core:practice_topics' 3%}">Senior</a>
+              <a href="{% url 'core:practice_topics' 0 'Freshman Topics'%}">Freshman</a>
+              <a href="{% url 'core:practice_topics' 1 'Sophomore Topics'%}">Sophomore</a>
+              <a href="{% url 'core:practice_topics' 2 'Junior Topics'%}">Junior</a>
+              <a href="{% url 'core:practice_topics' 3 'Senior Topics'%}">Senior</a>
             </div>
+          </div>
+
+          <div class="dropdown">
+              <p {% ifequal activeNav "4" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %}>Practice Regionals/State
+                <i class="fa fa-caret-down"></i>
+              </p>
+              <div class="dropdown-content">
+                <a href="{% url 'core:practice_topics' 4 'Freshman Regionals State'%}">Freshman</a>
+                <a href="{% url 'core:practice_topics' 5 'Sophomore Regionals State'%}">Sophomore</a>
+                <a href="{% url 'core:practice_topics' 6 'Junior Regionals State'%}">Junior</a>
+                <a href="{% url 'core:practice_topics' 7 'Senior Regionals State'%}">Senior</a>
+              </div>
           </div>
           <a {% ifequal activeNav "4" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:logout_user' %}">Logout</a>
           <div id="name"class="nav navbar-nav navbar-right">
