@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<h1 class = "banner" id="title">Practice Topics</h1>
+<h1 class = "banner" id="title">{{ title }}</h1>
 <br>
 
 {% for key, value, color in progress %}
@@ -14,7 +14,10 @@
         <div class="progress" style="width: 75%; margin: auto">
             <div class="{{ color }}" style="width:{{ value }}%"></div>
         </div><br>
-      <span class = "inline" style="font-size: 20px" id="status">{{  value }}%</span>
+      <span class = "inlinep" style="font-size: 20px; color: blue; margin-right: 20px" id="status">{{  value }}%</span>
+      <a href="{% url 'core:reset' key category title %}">
+        <button class="btn btn-blue" style="margin: 0px">Reset</button>
+      </a>
     </a>
   </div>
 {% endfor %}

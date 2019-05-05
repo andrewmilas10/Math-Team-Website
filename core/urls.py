@@ -9,13 +9,17 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^register/$', views.UserFormView.as_view(), name='register'),
     url(r'^post_list/$', views.post_list, name='post_list'),
+    url(r'^learn/(?P<category>[0-9]+)/(?P<title>[a-zA-Z, -]+)/$', views.learn, name='learn'),
     url(r'^question_list/$', views.question_list, name ='question_list'),
     url(r'^question_list/(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
     url(r'^login_user/$', views.login_user, name='login_user'),
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^homepage$', views.homepage, name='homepage'),
     url(r'^questions/(?P<filter_by>[a-zA_Z]+)/$', views.questions, name='questions'),
-    url(r'^practice_topics/$', views.practice_topics, name='practice_topics'),
-    url(r'^practice_topics_detail/(?P<topic>[a-zA-Z0-9, -]+)/$', views.practice_topics_detail, name='practice_topics_detail')
+    # url(r'^practice_topics/$', views.practice_topics, name='practice_topics'),
+    url(r'^practice_topics/(?P<title>[a-zA_Z]+)/$', views.practice_topics, name='practice_topics'),
 
+    url(r'^practice_topics/(?P<category>[0-9]+)/(?P<title>[a-zA-Z, -]+)/$', views.practice_topics, name='practice_topics'),
+    url(r'^practice_topics_detail/(?P<topic>[a-zA-Z0-9, -]+)/$', views.practice_topics_detail, name='practice_topics_detail'),
+    url(r'^reset/(?P<topic>[a-zA-Z0-9, -]+)/(?P<category>[0-9]+)/(?P<title>[a-zA-Z, -]+)/$', views.reset, name='reset')
 ]

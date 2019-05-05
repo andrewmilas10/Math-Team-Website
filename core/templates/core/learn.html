@@ -1,0 +1,21 @@
+
+{% extends 'core/Nav_Bar_Layout.html' %}
+
+{% block content %}
+
+<h1 class = "banner" id="title">{{ title }}</h1>
+<br>
+
+<div id="posts">
+    {% for post in posts %}
+        <div class="onePost">
+          <h4>{{ post.title }}</h4>
+          <p class="inline">{{ post.published_date }}</p>
+          <p>{{ post.text|linebreaksbr }}</p>
+          <p>{{ post.author }}</p>
+          <br><br>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

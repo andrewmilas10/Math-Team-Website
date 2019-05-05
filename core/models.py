@@ -21,7 +21,15 @@ class Profile(models.Model):
         'Circles',
         'Trigonometry',
         'Parametric Equations',
-        'Theory of Equations'
+        'Theory of Equations',
+        'Freshman Regionals',
+        'Freshman State',
+        'Sophomore Regionals',
+        'Sophomore State',
+        'Junior Regionals',
+        'Junior State',
+        'Senior Regionals',
+        'Senior State'
     )
 
     PROGRESS_OPTIONS = (
@@ -104,6 +112,14 @@ class Question(models.Model):
         ('Trigonometry', 'Trigonometry'),
         ('Parametric Equations', 'Parametric Equations'),
         ('Theory of Equations', 'Theory of Equations'),
+        ('Freshman Regionals', 'Freshman Regionals'),
+        ('Freshman State','Freshman State'),
+        ('Sophomore Regionals','Sophomore Regionals'),
+        ('Sophomore State','Sophomore State'),
+        ('Junior Regionals','Junior Regionals'),
+        ('Junior State','Junior State'),
+        ('Senior Regionals','Senior Regionals'),
+        ('Senior State','Senior State')
     )
     QUESTION_NUMBERS = (
         ('1','1'),

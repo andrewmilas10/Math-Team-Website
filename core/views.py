@@ -20,8 +20,14 @@ def index(request):
 def post_list(request):
     # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     posts = Post.objects.all().order_by('published_date')
-    print(posts.count())
-    return render(request, 'core/post_list.html', {'posts': posts})
+    return render(request, 'core/post_list.html', {'posts': posts, "activeNav": "1"})
+
+def learn(request, category, title):
+    global activeNav;
+    activeNav = "5"
+    # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    posts = Post.objects.all().order_by('published_date')
+    return render(request, 'core/learn.html', {'posts': posts, "title": title, "activeNav": "5"})
 
 #this is the function that is loaded when the list of questions is called, it also works on the search functionality of the
 #website by finding the questions under the filter with a serach query
@@ -62,13 +68,10 @@ def question_list(request):
                 question_results = question_results.filter(grade__in=gradesSearched)
             if numberSearched:
                 question_results = question_results.filter(difficulty__in=numberSearched)
-            return render(request, 'core/questions.html', {
-                        'questions': questions,
-                        'question_results': question_results,
-                    })
+            return render(request, 'core/questions.html', {'questions': questions,'question_results': question_results, "activeNav": "2"})
 
 
-        return render(request, 'core/question_list.html', {'questions': questions})
+        return render(request, 'core/question_list.html', {'questions': questions,"activeNav": "2"})
 
 
 
@@ -83,7 +86,8 @@ def detail(request, question_id):
     if submitbutton:
         context={
         'submitbutton': submitbutton,
-        'question': question
+        'question': question,
+        "activeNav": "2"
         }
         return render(request, 'core/question_detail.html', context)
     elif submitAnswerButton:
@@ -96,10 +100,11 @@ def detail(request, question_id):
             'submitAnswerButton': submitAnswerButton,
             'question': question,
             'correctAnswer': correctAnswer,
+            "activeNav": "2"
         }
         return render(request, 'core/question_detail.html', context)
     else:
-        return render(request, 'core/question_detail.html', {'question': question})
+        return render(request, 'core/question_detail.html', {'question': question, "activeNav": "0"})
 
 
 #this function handles the creating of a new user
@@ -127,7 +132,7 @@ class UserFormView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render(request, 'core/homepage_logged_in.html', {})
+                    return render(request, 'core/homepage_logged_in.html', {"activeNav": "0"})
         return render(request, 'core/registration_form.html', {'form': form, 'error_message': 'your username or email may already be registered. please choose another one'})
 
 
@@ -150,7 +155,7 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 questions = Question.objects.all()
-                return render(request, 'core/homepage_logged_in.html', {'questions': questions})
+                return render(request, 'core/homepage_logged_in.html', {'questions': questions, "activeNav": "0"})
             else:
                 return render(request, 'core/login.html', {'error_message': 'Your account has been disabled'})
         else:
@@ -158,7 +163,7 @@ def login_user(request):
     return render(request, 'core/login.html')
 
 def homepage(request):
-    return render(request, 'core/homepage_logged_in.html', {})
+    return render(request, 'core/homepage_logged_in.html', {"activeNav": "0"})
 
 def pickColor(progress):
     if progress >= 90:
@@ -170,18 +175,46 @@ def pickColor(progress):
     else:
         return "progress-bar-striped bg-danger"
 
-def practice_topics(request):
-    topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
-        , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
-                 'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
-                 'Parametric Equations', 'Theory of Equations']
+activeNav = "3";
+def practice_topics(request, category, title):
+    # topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
+    #     , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
+    #              'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
+    #              'Parametric Equations', 'Theory of Equations']
+    global activeNav;
+    if category == "0":
+        activeNav = "3";
+        topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility',
+                     'Counting Basics and Probability', 'Quadratics']
+    elif category == "1":
+        activeNav = "3";
+        topiclist = ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
+                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles']
+    elif category == "2":
+        activeNav = "3";
+        topiclist = ['Probability', 'Coordinate Geometry', 'Trigonometry']
+    elif category == "3":
+        activeNav = "3";
+        topiclist = ['Trigonometry', 'Parametric Equations', 'Theory of Equations']
+    elif category == "4":
+        activeNav = "4";
+        topiclist = ["Freshman Regionals", "Freshman State"]
+    elif category == "5":
+        activeNav = "4";
+        topiclist = ["Sophomore Regionals", "Sophomore State"]
+    elif category == "6":
+        activeNav = "4";
+        topiclist = ["Junior Regionals", "Junior State"]
+    elif category == "7":
+        activeNav = "4";
+        topiclist = ["Senior Regionals", "Senior State"]
     user = request.user
     progressDict = json.loads(user.profile.progress2)
     progress = []
     for num in reversed(sorted(progressDict.items(), key=operator.itemgetter(1))):
-        progress.append([num[0], num[1], pickColor(num[1])])
-
-    return render(request, 'core/practice_topics.html', {'progress': progress, 'topics': topiclist})
+        if (num[0] in topiclist):
+            progress.append([num[0], num[1], pickColor(num[1])])
+    return render(request, 'core/practice_topics.html', {'title': title, 'category': category, 'progress': progress, 'topics': topiclist, "activeNav": activeNav})
 
 def pickQuestion(topic):
     possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic)
@@ -194,7 +227,17 @@ def pickQuestion(topic):
 
     return random.choice(possQuestions)
 
+def reset(request, topic, category, title):
+    global activeNav;
+    user = request.user
+    progressDict = json.loads(user.profile.progress2)
+    progressDict[topic] = 0
+    user.profile.progress2 = json.dumps(progressDict)
+    user.profile.save()
+    return practice_topics(request, category, title)
+
 def practice_topics_detail(request, topic):
+    global activeNav;
     user = request.user
     progressDict = json.loads(user.profile.progress2)
     attemptsDict = json.loads(user.profile.attempts)
@@ -222,6 +265,7 @@ def practice_topics_detail(request, topic):
             'showSolutionButton': showSolutionButton,
             'question': pastQuestion,
             'correctAnswer': correctAnswer,
+            "activeNav": activeNav
         }
 
     if showSolutionButton:
@@ -263,7 +307,6 @@ def practice_topics_detail(request, topic):
     else:
         return render(request, 'core/practice_topics_detail.html', getContext())
 
-
 def questions(request, filter_by):
     if not request.user.is_authenticated():
         return render(request, 'core/login.html')
@@ -278,4 +321,5 @@ def questions(request, filter_by):
         return render(request, 'core/questions.html', {
             'question_list': users_questions,
             'filter_by': filter_by,
+            "activeNav": "2"
         })
