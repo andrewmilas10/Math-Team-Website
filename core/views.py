@@ -216,16 +216,23 @@ def practice_topics(request, category, title):
             progress.append([num[0], num[1], pickColor(num[1])])
     return render(request, 'core/practice_topics.html', {'title': title, 'category': category, 'progress': progress, 'topics': topiclist, "activeNav": activeNav})
 
-def pickQuestion(topic):
-    possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic)
+def pickQuestion(topic, difficulties):
+    possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic).filter(difficulty__in=difficulties)
+
     if not possQuestions.exists():
-        totalPoss = Question.objects.filter(topic=topic)
+        totalPoss = Question.objects.filter(topic=topic).filter(difficulty__in=difficulties)
         for poss in totalPoss:
             poss.is_complete = False
             poss.save()
-        possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic)
+        possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic).filter(difficulty__in=difficulties)
 
-    return random.choice(possQuestions)
+    for quest in possQuestions:
+        print(quest.answer)
+
+    question = random.choice(possQuestions)
+    question.is_complete = True
+    question.save()
+    return question
 
 def reset(request, topic, category, title):
     global activeNav;
@@ -245,7 +252,7 @@ def practice_topics_detail(request, topic):
 
     questionsIDsDict = json.loads(user.profile.currQuestions)
     if (questionsIDsDict[topic] == "N"):
-        pastQuestion = pickQuestion(topic)
+        pastQuestion = pickQuestion(topic, [1, 2])
         user.profile.currQuestions = json.dumps(questionsIDsDict)
         user.profile.save()
     else:
@@ -275,7 +282,15 @@ def practice_topics_detail(request, topic):
         currCorrectDict[topic] = "F"
         user.profile.attempts = json.dumps(attemptsDict)
         user.profile.currCorrect = json.dumps(currCorrectDict)
-        pastQuestion = pickQuestion(topic)
+        # pastQuestion.is_complete = True
+        # pastQuestion.save()
+
+        if progressDict[topic] <= 50:
+            difficulties = [1, 2, 3]
+        else:
+            difficulties = [4, 5]
+
+        pastQuestion = pickQuestion(topic, difficulties)
         questionsIDsDict[topic] = pastQuestion.id
         user.profile.currQuestions = json.dumps(questionsIDsDict)
         user.profile.save()
