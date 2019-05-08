@@ -47,25 +47,32 @@ class Profile(models.Model):
     )
 
     progress = models.IntegerField(choices=PROGRESS_OPTIONS, default=0)
-
     topicDict = "{"
     topicDict2 = "{"
     topicDict3 = "{"
     topicDict4 = "{"
+    topicDict4 = "{"
+    topicDict5 = "{"
+    i = 0
     for topic in TOPIC_LIST:
         topicDict+= "\"" + topic+"\": 0,"
         topicDict2 += "\"" + topic + "\": 3,"
         topicDict3 += "\"" + topic + "\": \"N\","
         topicDict4 += "\"" + topic + "\": \"F\","
+        topicDict5 += "\"" + topic + "\": " + str(i) + ","
+        i+=1
 
     topicDict = topicDict[:-1]+"}"
     topicDict2 = topicDict2[:-1] + "}"
     topicDict3 = topicDict3[:-1] + "}"
     topicDict4 = topicDict4[:-1] + "}"
+    topicDict5 = topicDict5[:-1] + "}"
     progress2 = models.CharField(max_length=1000, default=topicDict)
     attempts = models.CharField(max_length=1000, default=topicDict2)
     currQuestions = models.CharField(max_length=1000, default=topicDict3)
     currCorrect = models.CharField(max_length=1000, default=topicDict4)
+    topicOrder = models.CharField(max_length=1000, default=topicDict5)
+
 
     def __str__(self):
         return self.user.username + " Profile"

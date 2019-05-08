@@ -19,7 +19,7 @@ urlpatterns = [
     # url(r'^practice_topics/$', views.practice_topics, name='practice_topics'),
     url(r'^practice_topics/(?P<title>[a-zA_Z]+)/$', views.practice_topics, name='practice_topics'),
 
-    url(r'^practice_topics/(?P<category>[0-9]+)/(?P<title>[a-zA-Z, -]+)/$', views.practice_topics, name='practice_topics'),
+    url(r'^practice_topics/(?P<category>[0-9]+)/$', views.practice_topics, name='practice_topics'),
     url(r'^practice_topics_detail/(?P<topic>[a-zA-Z0-9, -]+)/$', views.practice_topics_detail, name='practice_topics_detail'),
-    url(r'^reset/(?P<topic>[a-zA-Z0-9, -]+)/(?P<category>[0-9]+)/(?P<title>[a-zA-Z, -]+)/$', views.reset, name='reset')
+    url(r'^reset/(?P<topic>[a-zA-Z0-9, -]+)/(?P<category>[0-9]+)/$', views.reset, name='reset')
 ]

@@ -13,6 +13,13 @@ import random
 from django.http import JsonResponse
 from django.db.models import Q
 
+topics = [['Ratios, Proportions and Percents', 'Number Theory and Divisibility',
+                     'Counting Basics and Probability', 'Quadratics'], ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
+                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles'], ['Probability', 'Coordinate Geometry', 'Trigonometry'],
+                    ['Trigonometry', 'Parametric Equations', 'Theory of Equations'], ["Freshman Regionals", "Freshman State"],
+                    ["Sophomore Regionals", "Sophomore State"], ["Junior Regionals", "Junior State"], ["Senior Regionals", "Senior State"]]
+activeNavs = ["3", "3", "3", "3", "4", "4", "4", "4"]
+titles = ['Freshman Topics', 'Sophomore Topics', 'Junior Topics', 'Senior Topics', 'Freshman Regionals/State',  'Sophomore Regionals/State',  'Junior Regionals/State',  'Senior Regionals/State']
 
 def index(request):
     return render(request, 'core/index.html', {})
@@ -176,38 +183,16 @@ def pickColor(progress):
         return "progress-bar-striped bg-danger"
 
 activeNav = "3";
-def practice_topics(request, category, title):
+def practice_topics(request, category):
     # topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
     #     , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
     #              'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
     #              'Parametric Equations', 'Theory of Equations']
-    global activeNav;
-    if category == "0":
-        activeNav = "3";
-        topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility',
-                     'Counting Basics and Probability', 'Quadratics']
-    elif category == "1":
-        activeNav = "3";
-        topiclist = ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
-                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles']
-    elif category == "2":
-        activeNav = "3";
-        topiclist = ['Probability', 'Coordinate Geometry', 'Trigonometry']
-    elif category == "3":
-        activeNav = "3";
-        topiclist = ['Trigonometry', 'Parametric Equations', 'Theory of Equations']
-    elif category == "4":
-        activeNav = "4";
-        topiclist = ["Freshman Regionals", "Freshman State"]
-    elif category == "5":
-        activeNav = "4";
-        topiclist = ["Sophomore Regionals", "Sophomore State"]
-    elif category == "6":
-        activeNav = "4";
-        topiclist = ["Junior Regionals", "Junior State"]
-    elif category == "7":
-        activeNav = "4";
-        topiclist = ["Senior Regionals", "Senior State"]
+    global activeNav, activeNavs, topics, titles;
+    category = int(category)
+    activeNav = activeNavs[category]
+    topiclist = topics[category]
+    title = titles[category]
     user = request.user
     progressDict = json.loads(user.profile.progress2)
     progress = []
@@ -234,14 +219,14 @@ def pickQuestion(topic, difficulties):
     question.save()
     return question
 
-def reset(request, topic, category, title):
+def reset(request, topic, category):
     global activeNav;
     user = request.user
     progressDict = json.loads(user.profile.progress2)
     progressDict[topic] = 0
     user.profile.progress2 = json.dumps(progressDict)
     user.profile.save()
-    return practice_topics(request, category, title)
+    return practice_topics(request, category)
 
 def practice_topics_detail(request, topic):
     global activeNav;
@@ -261,6 +246,8 @@ def practice_topics_detail(request, topic):
     submitAnswerButton = request.POST.get('submitAnswer')
     nextQuestionButton = request.POST.get('nextQuestion')
     showSolutionButton = request.POST.get('showSolution')
+    backButton = request.POST.get('back')
+    print(backButton)
     correctAnswer = False
 
     def getContext():
@@ -277,6 +264,11 @@ def practice_topics_detail(request, topic):
 
     if showSolutionButton:
         return render(request, 'core/practice_topics_detail.html', getContext())
+    elif backButton:
+        category = 0
+        while topic not in topics[category]:
+            category += 1
+        return practice_topics(request, str(category))
     elif nextQuestionButton and (currCorrectDict[topic] == "T" or attemptsDict[topic]==0):
         attemptsDict[topic] = 3
         currCorrectDict[topic] = "F"
