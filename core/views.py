@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Post
 from .models import Question
 from .models import Profile
+from .models import Topic
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -13,6 +14,13 @@ import random
 from django.http import JsonResponse
 from django.db.models import Q
 
+topics = [['Ratios, Proportions and Percents', 'Number Theory and Divisibility',
+                     'Counting Basics and Probability', 'Quadratics'], ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
+                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles'], ['Probability', 'Coordinate Geometry', 'Trigonometry'],
+                    ['Trigonometry', 'Parametric Equations', 'Theory of Equations'], ["Freshman Regionals", "Freshman State"],
+                    ["Sophomore Regionals", "Sophomore State"], ["Junior Regionals", "Junior State"], ["Senior Regionals", "Senior State"]]
+activeNavs = ["3", "3", "3", "3", "4", "4", "4", "4"]
+titles = ['Freshman Topics', 'Sophomore Topics', 'Junior Topics', 'Senior Topics', 'Freshman Regionals/State',  'Sophomore Regionals/State',  'Junior Regionals/State',  'Senior Regionals/State']
 
 def index(request):
     return render(request, 'core/index.html', {})
@@ -23,11 +31,19 @@ def post_list(request):
     return render(request, 'core/post_list.html', {'posts': posts, "activeNav": "1"})
 
 def learn(request, category, title):
-    global activeNav;
+    global activeNav, topics;
     activeNav = "5"
-    # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    posts = Post.objects.all().order_by('published_date')
-    return render(request, 'core/learn.html', {'posts': posts, "title": title, "activeNav": "5"})
+    category = int(category)
+    topiclist = topics[category]
+    allTopics = Topic.objects.all()
+    topicDesriptions = []
+    for top in allTopics:
+        if (top.topic in topiclist):
+            topicDesriptions.append([top.description, top.topic, top.firstFile])
+            print(top.firstFile.url)
+
+    print(topicDesriptions)
+    return render(request, 'core/learn.html', {'topicDescriptions': topicDesriptions, "title": title, "activeNav": "5"})
 
 #this is the function that is loaded when the list of questions is called, it also works on the search functionality of the
 #website by finding the questions under the filter with a serach query
@@ -176,65 +192,51 @@ def pickColor(progress):
         return "progress-bar-striped bg-danger"
 
 activeNav = "3";
-def practice_topics(request, category, title):
+def practice_topics(request, category):
     # topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
     #     , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
     #              'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
     #              'Parametric Equations', 'Theory of Equations']
-    global activeNav;
-    if category == "0":
-        activeNav = "3";
-        topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility',
-                     'Counting Basics and Probability', 'Quadratics']
-    elif category == "1":
-        activeNav = "3";
-        topiclist = ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
-                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles']
-    elif category == "2":
-        activeNav = "3";
-        topiclist = ['Probability', 'Coordinate Geometry', 'Trigonometry']
-    elif category == "3":
-        activeNav = "3";
-        topiclist = ['Trigonometry', 'Parametric Equations', 'Theory of Equations']
-    elif category == "4":
-        activeNav = "4";
-        topiclist = ["Freshman Regionals", "Freshman State"]
-    elif category == "5":
-        activeNav = "4";
-        topiclist = ["Sophomore Regionals", "Sophomore State"]
-    elif category == "6":
-        activeNav = "4";
-        topiclist = ["Junior Regionals", "Junior State"]
-    elif category == "7":
-        activeNav = "4";
-        topiclist = ["Senior Regionals", "Senior State"]
+    global activeNav, activeNavs, topics, titles;
+    category = int(category)
+    activeNav = activeNavs[category]
+    topiclist = topics[category]
+    title = titles[category]
     user = request.user
-    progressDict = json.loads(user.profile.progress2)
+    topicOrderDict = json.loads(user.profile.topicOrder)
+    progress2 = json.loads(user.profile.progress2)
     progress = []
-    for num in reversed(sorted(progressDict.items(), key=operator.itemgetter(1))):
+    for num in sorted(topicOrderDict.items(), key=operator.itemgetter(1)):
         if (num[0] in topiclist):
-            progress.append([num[0], num[1], pickColor(num[1])])
+            progress.append([num[0], progress2[num[0]], pickColor(progress2[num[0]])])
     return render(request, 'core/practice_topics.html', {'title': title, 'category': category, 'progress': progress, 'topics': topiclist, "activeNav": activeNav})
 
-def pickQuestion(topic):
-    possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic)
+def pickQuestion(topic, difficulties):
+    possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic).filter(difficulty__in=difficulties)
+
     if not possQuestions.exists():
-        totalPoss = Question.objects.filter(topic=topic)
+        totalPoss = Question.objects.filter(topic=topic).filter(difficulty__in=difficulties)
         for poss in totalPoss:
             poss.is_complete = False
             poss.save()
-        possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic)
+        possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic).filter(difficulty__in=difficulties)
 
-    return random.choice(possQuestions)
+    for quest in possQuestions:
+        print(quest.answer)
 
-def reset(request, topic, category, title):
+    question = random.choice(possQuestions)
+    question.is_complete = True
+    question.save()
+    return question
+
+def reset(request, topic, category):
     global activeNav;
     user = request.user
     progressDict = json.loads(user.profile.progress2)
     progressDict[topic] = 0
     user.profile.progress2 = json.dumps(progressDict)
     user.profile.save()
-    return practice_topics(request, category, title)
+    return practice_topics(request, category)
 
 def practice_topics_detail(request, topic):
     global activeNav;
@@ -243,9 +245,16 @@ def practice_topics_detail(request, topic):
     attemptsDict = json.loads(user.profile.attempts)
     currCorrectDict = json.loads(user.profile.currCorrect)
 
+    topicOrderDict = json.loads(user.profile.topicOrder)
+    for top in topicOrderDict.keys():
+        topicOrderDict[top]+=1
+    topicOrderDict[topic] = 0
+    user.profile.topicOrder = json.dumps(topicOrderDict)
+    user.profile.save()
+
     questionsIDsDict = json.loads(user.profile.currQuestions)
     if (questionsIDsDict[topic] == "N"):
-        pastQuestion = pickQuestion(topic)
+        pastQuestion = pickQuestion(topic, [1, 2])
         user.profile.currQuestions = json.dumps(questionsIDsDict)
         user.profile.save()
     else:
@@ -254,6 +263,8 @@ def practice_topics_detail(request, topic):
     submitAnswerButton = request.POST.get('submitAnswer')
     nextQuestionButton = request.POST.get('nextQuestion')
     showSolutionButton = request.POST.get('showSolution')
+    backButton = request.POST.get('back')
+    print(backButton)
     correctAnswer = False
 
     def getContext():
@@ -270,12 +281,25 @@ def practice_topics_detail(request, topic):
 
     if showSolutionButton:
         return render(request, 'core/practice_topics_detail.html', getContext())
+    elif backButton:
+        category = 0
+        while topic not in topics[category]:
+            category += 1
+        return practice_topics(request, str(category))
     elif nextQuestionButton and (currCorrectDict[topic] == "T" or attemptsDict[topic]==0):
         attemptsDict[topic] = 3
         currCorrectDict[topic] = "F"
         user.profile.attempts = json.dumps(attemptsDict)
         user.profile.currCorrect = json.dumps(currCorrectDict)
-        pastQuestion = pickQuestion(topic)
+        # pastQuestion.is_complete = True
+        # pastQuestion.save()
+
+        if progressDict[topic] <= 50:
+            difficulties = [1, 2, 3]
+        else:
+            difficulties = [4, 5]
+
+        pastQuestion = pickQuestion(topic, difficulties)
         questionsIDsDict[topic] = pastQuestion.id
         user.profile.currQuestions = json.dumps(questionsIDsDict)
         user.profile.save()

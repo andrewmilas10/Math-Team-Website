@@ -47,25 +47,32 @@ class Profile(models.Model):
     )
 
     progress = models.IntegerField(choices=PROGRESS_OPTIONS, default=0)
-
     topicDict = "{"
     topicDict2 = "{"
     topicDict3 = "{"
     topicDict4 = "{"
+    topicDict4 = "{"
+    topicDict5 = "{"
+    i = 0
     for topic in TOPIC_LIST:
         topicDict+= "\"" + topic+"\": 0,"
         topicDict2 += "\"" + topic + "\": 3,"
         topicDict3 += "\"" + topic + "\": \"N\","
         topicDict4 += "\"" + topic + "\": \"F\","
+        topicDict5 += "\"" + topic + "\": " + str(i) + ","
+        i+=1
 
     topicDict = topicDict[:-1]+"}"
     topicDict2 = topicDict2[:-1] + "}"
     topicDict3 = topicDict3[:-1] + "}"
     topicDict4 = topicDict4[:-1] + "}"
+    topicDict5 = topicDict5[:-1] + "}"
     progress2 = models.CharField(max_length=1000, default=topicDict)
     attempts = models.CharField(max_length=1000, default=topicDict2)
     currQuestions = models.CharField(max_length=1000, default=topicDict3)
     currCorrect = models.CharField(max_length=1000, default=topicDict4)
+    topicOrder = models.CharField(max_length=1000, default=topicDict5)
+
 
     def __str__(self):
         return self.user.username + " Profile"
@@ -87,6 +94,57 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+#this function handles all of the posts on the website. when an admin makes a new post, these are all of the
+#variables for each object
+class Topic(models.Model):
+    GRADES_LIST = (
+        ('Freshman', 'Freshman'),
+        ('Sophomore', 'Sophomore'),
+        ('Junior', 'Junior'),
+        ('Senior', 'Senior'),
+    )
+    TOPIC_LIST = (
+        ('Ratios, Proportions and Percents', 'Ratios, Proportions and Percents'),
+        ('Number Theory and Divisibility', 'Number Theory and Divisibility'),
+        ('Counting Basics and Probability', 'Counting Basics and Probability'),
+        ('Quadratics', 'Quadratics'),
+        ('Probability', 'Probability'),
+        ('Advanced Geometrical Concepts', 'Advanced Geometrical Concepts'),
+        ('Perimeter, Area and Surface Area', 'Perimeter, Area and Surface Area'),
+        ('Logic, Sets and Venn Diagram', 'Logic, Sets and Venn Diagram'),
+        ('Similarity', 'Similarity'),
+        ('Coordinate Geometry', 'Coordinate Geometry'),
+        ('Circles', 'Circles'),
+        ('Trigonometry', 'Trigonometry'),
+        ('Parametric Equations', 'Parametric Equations'),
+        ('Theory of Equations', 'Theory of Equations'),
+        ('Freshman Regionals', 'Freshman Regionals'),
+        ('Freshman State', 'Freshman State'),
+        ('Sophomore Regionals', 'Sophomore Regionals'),
+        ('Sophomore State', 'Sophomore State'),
+        ('Junior Regionals', 'Junior Regionals'),
+        ('Junior State', 'Junior State'),
+        ('Senior Regionals', 'Senior Regionals'),
+        ('Senior State', 'Senior State')
+    )
+
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    grade = models.CharField(max_length=9, choices=GRADES_LIST, default='Freshman')
+    topic = models.CharField(max_length=100, choices=TOPIC_LIST, default='Ratios, Proportions and Percents')
+    description = models.TextField(default="", blank=True)
+    firstFile = models.FileField()
+    secondFile = models.FileField()
+    thirdFile = models.FileField()
+    created_date = models.DateTimeField(
+        default=timezone.now)
+
+    def __str__(self):
+        return self.topic
+
+    def publish(self):
+        self.published_date = timezone.now()
+        self.save()
 
 #as for the post, the variables for questions are listed here and when admins make a new question,
 #it receives all of the parameters from here.

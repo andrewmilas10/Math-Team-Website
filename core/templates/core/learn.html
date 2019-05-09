@@ -6,14 +6,15 @@
 <h1 class = "banner" id="title">{{ title }}</h1>
 <br>
 
-<div id="posts">
-    {% for post in posts %}
+<div style="text-align: left; padding: 20px" class="questionList">
+    {% for post in topicDescriptions %}
         <div class="onePost">
-          <h4>{{ post.title }}</h4>
-          <p class="inline">{{ post.published_date }}</p>
-          <p>{{ post.text|linebreaksbr }}</p>
-          <p>{{ post.author }}</p>
+          <h4 style="font-weight: bold">{{ post.1}}</h4>
           <br><br>
+          <a href="{{ post.2.url }}">{{ post.2 }}</a>
+{#          <p class="inline">{{ post.published_date }}</p>#}
+          <p>{{ post.0|linebreaksbr }}</p>
+{#          <p>{{ post.author }}</p>#}
         </div>
     {% endfor %}
 </div>
