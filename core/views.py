@@ -14,11 +14,16 @@ import random
 from django.http import JsonResponse
 from django.db.models import Q
 
-topics = [['Ratios, Proportions and Percents', 'Number Theory and Divisibility',
-                     'Counting Basics and Probability', 'Quadratics'], ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
-                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles'], ['Probability', 'Coordinate Geometry', 'Trigonometry'],
-                    ['Trigonometry', 'Parametric Equations', 'Theory of Equations'], ["Freshman Regionals", "Freshman State"],
-                    ["Sophomore Regionals", "Sophomore State"], ["Junior Regionals", "Junior State"], ["Senior Regionals", "Senior State"]]
+topics = [['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability', 'Quadratics'],
+          ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
+                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles'],
+          ['Probability', 'Coordinate Geometry', 'Trigonometry'],
+          ['Trigonometry', 'Parametric Equations', 'Theory of Equations'],
+          ["Freshman Regionals", "Freshman State"],
+          ["Sophomore Regionals", "Sophomore State"],
+          ["Junior Regionals", "Junior State"],
+          ["Senior Regionals", "Senior State"]]
+
 activeNavs = ["3", "3", "3", "3", "4", "4", "4", "4"]
 titles = ['Freshman Topics', 'Sophomore Topics', 'Junior Topics', 'Senior Topics', 'Freshman Regionals/State',  'Sophomore Regionals/State',  'Junior Regionals/State',  'Senior Regionals/State']
 
@@ -202,6 +207,10 @@ def practice_topics(request, category):
     activeNav = activeNavs[category]
     topiclist = topics[category]
     title = titles[category]
+
+    if activeNav == 3:
+        topiclist.append(title[: title.find(' ')]+"Conference")
+
     user = request.user
     topicOrderDict = json.loads(user.profile.topicOrder)
     progress2 = json.loads(user.profile.progress2)
@@ -233,9 +242,21 @@ def reset(request, topic, category):
     global activeNav;
     user = request.user
     progressDict = json.loads(user.profile.progress2)
+    attemptsDict = json.loads(user.profile.attempts)
+    currCorrectDict = json.loads(user.profile.currCorrect)
+    questionsIDsDict = json.loads(user.profile.currQuestions)
+
     progressDict[topic] = 0
+    attemptsDict[topic] = 3
+    currCorrectDict[topic] = "F"
+    questionsIDsDict[topic] = "N"
+
     user.profile.progress2 = json.dumps(progressDict)
+    user.profile.currQuestions = json.dumps(questionsIDsDict)
+    user.profile.attempts = json.dumps(attemptsDict)
+    user.profile.currCorrect = json.dumps(currCorrectDict)
     user.profile.save()
+
     return practice_topics(request, category)
 
 def practice_topics_detail(request, topic):
