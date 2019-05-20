@@ -95,7 +95,7 @@ h3{
 }
 
 #footer {
-   position:absolute;
+   position:fixed;
    bottom:0;
    font-size: 15px;
    text-align: right;

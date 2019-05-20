@@ -14,11 +14,11 @@ import random
 from django.http import JsonResponse
 from django.db.models import Q
 
-topics = [['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability', 'Quadratics'],
+topics = [['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability', 'Quadratics', 'Freshman Conference'],
           ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
-                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles'],
-          ['Probability', 'Coordinate Geometry', 'Trigonometry'],
-          ['Trigonometry', 'Parametric Equations', 'Theory of Equations'],
+                     'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Sophomore Conference'],
+          ['Probability', 'Coordinate Geometry', 'Trigonometry', 'Junior Conference'],
+          ['Trigonometry', 'Parametric Equations', 'Theory of Equations', 'Senior Conference'],
           ["Freshman Regionals", "Freshman State"],
           ["Sophomore Regionals", "Sophomore State"],
           ["Junior Regionals", "Junior State"],
@@ -208,9 +208,6 @@ def practice_topics(request, category):
     topiclist = topics[category]
     title = titles[category]
 
-    if activeNav == 3:
-        topiclist.append(title[: title.find(' ')]+"Conference")
-
     user = request.user
     topicOrderDict = json.loads(user.profile.topicOrder)
     progress2 = json.loads(user.profile.progress2)
@@ -221,14 +218,19 @@ def practice_topics(request, category):
     return render(request, 'core/practice_topics.html', {'title': title, 'category': category, 'progress': progress, 'topics': topiclist, "activeNav": activeNav})
 
 def pickQuestion(topic, difficulties):
-    possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic).filter(difficulty__in=difficulties)
-
+    if topic in ['Freshman Conference', 'Sophomore Conference', 'Junior Conference', 'Senior Conference']:
+        topicList = topics[['Freshman Conference', 'Sophomore Conference', 'Junior Conference', 'Senior Conference'].index(topic)]
+    else:
+        topicList = [topic]
+    # print(topicList)
+    possQuestions = Question.objects.filter(is_complete=False).filter(topic__in=topicList).filter(difficulty__in=difficulties)
+    print(possQuestions)
     if not possQuestions.exists():
-        totalPoss = Question.objects.filter(topic=topic).filter(difficulty__in=difficulties)
+        totalPoss = Question.objects.filter(topic__in=topicList).filter(difficulty__in=difficulties)
         for poss in totalPoss:
             poss.is_complete = False
             poss.save()
-        possQuestions = Question.objects.filter(is_complete=False).filter(topic=topic).filter(difficulty__in=difficulties)
+        possQuestions = Question.objects.filter(is_complete=False).filter(topic__in=topicList).filter(difficulty__in=difficulties)
 
     for quest in possQuestions:
         print(quest.answer)
@@ -276,6 +278,7 @@ def practice_topics_detail(request, topic):
     questionsIDsDict = json.loads(user.profile.currQuestions)
     if (questionsIDsDict[topic] == "N"):
         pastQuestion = pickQuestion(topic, [1, 2])
+        questionsIDsDict[topic] = pastQuestion.id
         user.profile.currQuestions = json.dumps(questionsIDsDict)
         user.profile.save()
     else:

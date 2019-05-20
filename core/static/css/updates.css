@@ -15,13 +15,13 @@
   float: left !important;
 }
 
-.navbar-nav.navbar-right:last-child{
-  margin-right: -15px !important;
-}
+/*.navbar-nav.navbar-right:last-child{*/
+  /*margin-right: -15px !important;*/
+/*}*/
 
-.navbar-right{
-  float: right !important;
-}
+/*.navbar-right{*/
+  /*float: right !important;*/
+/*}*/
 
 body{
   margin: 0;
@@ -51,7 +51,7 @@ h4{
     margin-left: 10px;
 }
 #footer {
-   position:absolute;
+   position:fixed;
    bottom:0;
    font-size: 15px;
    text-align: right;

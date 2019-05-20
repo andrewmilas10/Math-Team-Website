@@ -36,7 +36,7 @@ h3{
   padding: 10px 15px 10px 15px;
 }
 #footer {
-   position:absolute;
+   position:fixed;
    bottom:0;
    text-align: right;
    width:100%;
@@ -123,10 +123,10 @@ h3{
   float: left !important;
 }
 
-.navbar-nav.navbar-right:last-child{
-  margin-right: -15px !important;
-}
+/*.navbar-nav.navbar-right:last-child{*/
+  /*margin-right: -15px !important;*/
+/*}*/
 
-.navbar-right{
-  float: right !important;
-}
+/*.navbar-right{*/
+  /*float: right !important;*/
+/*}*/

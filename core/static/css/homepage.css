@@ -87,11 +87,11 @@ h3{
 }
 
 #footer {
-   position:absolute;
+   position:fixed;
    bottom:0;
    text-align: right;
    width:100%;
-   height:60px;   /* Height of the footer */
+   height:200px;   /* Height of the footer */
    padding-right: 25px;
 }
 
@@ -99,7 +99,7 @@ h3{
 #name{
   float: right !important;
   text-align: right;
-  margin-left: 200px;
+  /*margin-left: 200px;*/
   margin-right: 15px;
   margin-top: 7px;
 }

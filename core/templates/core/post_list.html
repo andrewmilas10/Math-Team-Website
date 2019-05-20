@@ -1,6 +1,7 @@
 {% extends 'core/Nav_Bar_Layout.html' %}
 
 {% block content %}
+    <div >
     <h1 id="title">Conant Math Team Updates</h1>
     <div id="posts">
     {% for post in posts %}
@@ -12,6 +13,7 @@
           <br><br>
         </div>
     {% endfor %}
+    </div>
     </div>
 {% endblock %}
 

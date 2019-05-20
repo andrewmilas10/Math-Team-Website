@@ -14,11 +14,23 @@
     <link rel="stylesheet" href="{% static 'css/question.css' %}">
     <link rel="stylesheet" href="{% static 'css/practice.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <style>
+        html, body {
+            max-width: 100%;
+            min-height: 89vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
 <body>
   <nav class="navbar navbar-expand navbar-light bg-light">
 
-    <div class="navbar-nav">
+    <div  class="navbar-nav"> {# height: 74#}
           <span class="navbar-brand">Conant Math Team</span>
           <a {% ifequal activeNav "0" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:homepage' %}">Home<span class="sr-only">(current)</span></a>
           <a {% ifequal activeNav "1" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:post_list' %}">Updates</a>
@@ -62,8 +74,8 @@
               </div>
           </div>
           <a {% ifequal activeNav "4" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:logout_user' %}">Logout</a>
-          <div id="name"class="nav navbar-nav navbar-right">
-            <h3 id="welcome">Welcome, {{ user.username }}</h3>
+          <div style="float: right; text-align: right; margin-top: 7px;padding-left: 40px; padding-right: 10px" class="nav navbar-nav navbar-right">
+            <h3 id="welcome">Welcome {{ user.username }}</h3>
           </div>
     </div>
 
@@ -73,7 +85,7 @@
       {% block content %}
       {% endblock %}
   </div>
+    <footer id="footer" style="position: absolute; height: 40px; padding-top: 40px; padding-bottom: 19px" >©2018 Created by Nisha Pant and Andrew Milas</footer>
 
-  <footer id="footer">©2018 Created by Nisha Pant and Andrew Milas</footer>
 </body>
 </html>
