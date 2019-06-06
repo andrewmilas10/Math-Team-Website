@@ -44,10 +44,9 @@ def learn(request, category, title):
     topicDesriptions = []
     for top in allTopics:
         if (top.topic in topiclist):
-            topicDesriptions.append([top.description, top.topic, top.firstFile])
-            print(top.firstFile.url)
+            topicDesriptions.append([top.topic, top.description, top.firstFile, top.secondDescription, top.secondFile,
+                                     top.thirdDescription, top.thirdFile, top.fourthDescription])
 
-    print(topicDesriptions)
     return render(request, 'core/learn.html', {'topicDescriptions': topicDesriptions, "title": title, "activeNav": "5"})
 
 #this is the function that is loaded when the list of questions is called, it also works on the search functionality of the

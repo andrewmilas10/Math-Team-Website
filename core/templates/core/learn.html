@@ -9,12 +9,35 @@
 <div style="text-align: left; padding: 20px; position: relative" class="questionList">
     {% for post in topicDescriptions %}
         <div class="onePost">
-          <h4 style="font-weight: bold">{{ post.1}}</h4>
+          <h4 style="font-weight: bold">{{ post.0}}</h4>
           <br><br>
-          <a href="{{ post.2.url }}">{{ post.2 }}</a>
-{#          <p class="inline">{{ post.published_date }}</p>#}
-          <p>{{ post.0|linebreaksbr }}</p>
-{#          <p>{{ post.author }}</p>#}
+            {% if post.1 %}
+               <p>{{ post.1|linebreaksbr }}</p>
+            {% endif %}
+
+            {% if post.2 %}
+               <a href="{{ post.2.url }}">{{ post.2 }}</a>
+            {% endif %}
+
+            {% if post.3 %}
+               <p>{{ post.3|linebreaksbr }}</p>
+            {% endif %}
+
+            {% if post.4 %}
+               <a href="{{ post.4.url }}">{{ post.4 }}</a>
+            {% endif %}
+
+            {% if post.5 %}
+               <p>{{ post.5|linebreaksbr }}</p>
+            {% endif %}
+
+            {% if post.6 %}
+               <a href="{{ post.6.url }}">{{ post.6 }}</a>
+            {% endif %}
+
+            {% if post.7 %}
+               <p>{{ post.7|linebreaksbr }}</p>
+            {% endif %}
         </div>
     {% endfor %}
 </div>

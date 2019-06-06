@@ -14,7 +14,12 @@
 
     </div>
     <div class="questionList">
-        <img class="img-fluid" src="{{ question.questionPicture.url }}" width="1000" height="500">
+        {% if question.questionPicture %}
+            <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
+        {% endif %}
+        {% if question.questionText %}
+           <p style="font-size: 20px">{{ question.questionText|linebreaksbr }}</p>
+        {% endif %}
         <p class="left">Topic: {{ question.topic }}</p>
         <p class="left">Difficulty: {{ question.difficulty }}</p>
         <p class="left">Year: {{ question.year }}</p>
@@ -22,7 +27,16 @@
         <p class="left">Answer: {{ question.answer }}</p>
 
         {% if showSolutionButton %}
-            <img class="img-fluid"src="{{ question.answerPicture.url }}" width="1000" height="500">
+            <div style="margin: auto">
+                {% if question.answerPicture %}
+                    <img class="img-fluid" src="{{ question.answerPicture.url }}" width="1000" height="500">
+                {% endif %}
+                {% if question.answerText %}
+                   <p style="font-size: 20px">{{ question.answerText|linebreaksbr }}</p>
+                {% endif %}
+            </div>
+
+
             <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
             {% csrf_token %}
             <input type="submit" name="nextQuestion" value="Next Question" class="btn btn-blue"/>
