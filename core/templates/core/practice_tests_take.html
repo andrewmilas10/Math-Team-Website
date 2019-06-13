@@ -1,0 +1,23 @@
+
+{% extends 'core/Nav_Bar_Layout.html' %}
+
+{% block content %}
+
+<h1 class = "banner" id="title">{{ title }}</h1>
+<br>
+
+
+{% for question in questions %}
+    <div class="questionList">
+        {% if question.questionPicture %}
+            <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
+        {% endif %}
+        {% if question.questionText %}
+           <p style="font-size: 20px">{{ question.questionText|linebreaksbr }}</p>
+        {% endif %}
+        <p class="left">Answer: {{ question.answer }}</p>
+    </div>
+
+{% endfor %}
+
+{% endblock %}

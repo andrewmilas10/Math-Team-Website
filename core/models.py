@@ -50,7 +50,7 @@ class Profile(models.Model):
         (100, 100)
     )
 
-    progress = models.IntegerField(choices=PROGRESS_OPTIONS, default=0)
+    # progress = models.IntegerField(choices=PROGRESS_OPTIONS, default=0)
     topicDict = "{"
     topicDict2 = "{"
     topicDict3 = "{"
@@ -76,6 +76,38 @@ class Profile(models.Model):
     currQuestions = models.CharField(max_length=1000, default=topicDict3)
     currCorrect = models.CharField(max_length=1000, default=topicDict4)
     topicOrder = models.CharField(max_length=1000, default=topicDict5)
+
+    TEST_LIST = (
+        '2016 Advanced Geometrical Concepts',
+        '2016 Ratios, Proportions and Percents',
+        'RAND Ratios, Proportions and Percents'
+    )
+    testDict = "{"
+    # topicDict2 = "{"
+    # topicDict3 = "{"
+    # topicDict4 = "{"
+    # topicDict4 = "{"
+    # topicDict5 = "{"
+    i = 0
+    for topic in TEST_LIST:
+        testDict += "\"" + topic + "\": 0,"
+        # topicDict2 += "\"" + topic + "\": 3,"
+        # topicDict3 += "\"" + topic + "\": \"N\","
+        # topicDict4 += "\"" + topic + "\": \"F\","
+        # topicDict5 += "\"" + topic + "\": " + str(i) + ","
+        i += 1
+
+    testDict = testDict[:-1] + "}"
+    # topicDict2 = topicDict2[:-1] + "}"
+    # topicDict3 = topicDict3[:-1] + "}"
+    # topicDict4 = topicDict4[:-1] + "}"
+    # topicDict5 = topicDict5[:-1] + "}"
+    testProgress = models.CharField(max_length=9999, default=testDict)
+    # attempts = models.CharField(max_length=1000, default=topicDict2)
+    # currQuestions = models.CharField(max_length=1000, default=topicDict3)
+    # currCorrect = models.CharField(max_length=1000, default=topicDict4)
+    # topicOrder = models.CharField(max_length=1000, default=topicDict5)
+
 
 
     def __str__(self):
@@ -206,6 +238,8 @@ class Question(models.Model):
     year = models.CharField(max_length=250)
     created_date = models.DateTimeField(
             default=timezone.now)
+    is_NSML = models.BooleanField(default=True)
+    calc_allowed = models.BooleanField(default=False)
     is_complete = models.BooleanField(default=False)
 
     def __str__(self):

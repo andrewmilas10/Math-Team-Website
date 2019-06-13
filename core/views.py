@@ -146,7 +146,7 @@ class UserFormView(View):
             user.set_password(password)
             user.save()
 
-            Profile.objects.create(user=user, progress= 0)
+            Profile.objects.create(user=user)
 
             user = authenticate(username=username, password=password)
             if user is not None:
@@ -197,10 +197,6 @@ def pickColor(progress):
 
 activeNav = "3";
 def practice_topics(request, category):
-    # topiclist = ['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability'
-    #     , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
-    #              'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
-    #              'Parametric Equations', 'Theory of Equations']
     global activeNav, activeNavs, topics, titles;
     category = int(category)
     activeNav = activeNavs[category]
@@ -213,7 +209,9 @@ def practice_topics(request, category):
     progress = []
     for num in sorted(topicOrderDict.items(), key=operator.itemgetter(1)):
         if (num[0] in topiclist):
-            progress.append([num[0], progress2[num[0]], pickColor(progress2[num[0]])])
+            possQuestions = Question.objects.filter(topic__in=[num[0]])
+            if possQuestions.exists() or (num[0] in['Freshman Conference', 'Sophomore Conference', 'Junior Conference', 'Senior Conference'] ):
+                progress.append([num[0], progress2[num[0]], pickColor(progress2[num[0]])])
     return render(request, 'core/practice_topics.html', {'title': title, 'category': category, 'progress': progress, 'topics': topiclist, "activeNav": activeNav})
 
 def pickQuestion(topic, difficulties):
@@ -354,6 +352,41 @@ def practice_topics_detail(request, topic):
     else:
         return render(request, 'core/practice_topics_detail.html', getContext())
 
+activeNav = "6";
+def practice_tests(request, category):
+    global activeNav, activeNavs, topics, titles;
+    category = int(category)
+    activeNav = "6"
+    topiclist = topics[category]
+    title = titles[category][:-6]+"Tests"
+
+    user = request.user
+    topicOrderDict = json.loads(user.profile.topicOrder)
+    progress2 = json.loads(user.profile.progress2)
+    progress = []
+    for num in sorted(topicOrderDict.items(), key=operator.itemgetter(1)):
+        if (num[0] in topiclist):
+            possQuestions = Question.objects.filter(topic__in=[num[0]])
+            if possQuestions.exists() or (num[0] in ['Freshman Conference', 'Sophomore Conference', 'Junior Conference','Senior Conference']):
+                progress.append([num[0], progress2[num[0]], pickColor(progress2[num[0]])])
+    return render(request, 'core/practice_tests.html', {'title': title, 'category': category, 'progress': progress, 'topics': topiclist, "activeNav": activeNav})
+
+def practice_tests_detail(request, topic):
+    global activeNav;
+    user = request.user
+    testProgress = json.loads(user.profile.testProgress)
+    testInfo = []
+    for num in testProgress.items():
+        print(num[0], num[0][5:], topic)
+        if (num[0][5:] == topic):
+            if num[0][:4] != "RAND" and Question.objects.filter(topic__in=[topic]).filter(year = num[0][:4])[0].calc_allowed:
+                calcAllowed = "Calculator Allowed"
+            else:
+                calcAllowed = "No Calculator"
+            testInfo.append([num[0], str(num[1])+"/5", calcAllowed])
+    print(testInfo)
+    return render(request, 'core/practice_tests_detail.html', {'title': topic, 'testInfo': testInfo, "activeNav": activeNav})
+
 def questions(request, filter_by):
     if not request.user.is_authenticated():
         return render(request, 'core/login.html')
@@ -370,3 +403,9 @@ def questions(request, filter_by):
             'filter_by': filter_by,
             "activeNav": "2"
         })
+
+def practice_tests_take(request, topic):
+    global activeNav;
+    user = request.user
+    questions = sorted(Question.objects.filter(topic__in=[topic[5:]]).filter(year = topic[:4]), key=lambda t: t.difficulty)
+    return render(request, 'core/practice_tests_take.html', {'title': topic, 'questions': questions, "activeNav": activeNav})

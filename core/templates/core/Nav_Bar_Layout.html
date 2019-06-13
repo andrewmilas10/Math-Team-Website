@@ -75,10 +75,25 @@
                 <a href="{% url 'core:practice_topics' 7%}">Senior</a>
               </div>
           </div>
+
+          <div class="dropdown">
+              <p {% ifequal activeNav "6" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %}>Practice Tests
+                <i class="fa fa-caret-down"></i>
+              </p>
+              <div class="dropdown-content">
+                <a href="{% url 'core:practice_tests' 0%}">Freshman</a>
+                <a href="{% url 'core:practice_tests' 1%}">Sophomore</a>
+                <a href="{% url 'core:practice_tests' 2%}">Junior</a>
+                <a href="{% url 'core:practice_tests' 3%}">Senior</a>
+              </div>
+          </div>
+
           <a {% ifequal activeNav "4" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:logout_user' %}">Logout</a>
           <div style="float: right; text-align: right; margin-top: 7px;padding-left: 40px; padding-right: 10px" class="nav navbar-nav navbar-right">
             <h3 id="welcome">Welcome {{ user.username }}</h3>
           </div>
+
+
     </div>
 
 </nav>
