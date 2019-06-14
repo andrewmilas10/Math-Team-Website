@@ -1,14 +1,18 @@
-
 {% extends 'core/Nav_Bar_Layout.html' %}
+{% load staticfiles %}
 
 {% block content %}
 
 <h1 class = "banner" id="title">{{ title }}</h1>
-<br>
+<h1 style="text-align: center; font-size: 45px; margin-top: 10px" id="timer">Time: 30:00</h1>
 
+<form action="{% url 'core:practice_tests_take' title%}" method="post" role="form">
+{% csrf_token %}
+{{ form.as_p }}
 
 {% for question in questions %}
     <div class="questionList">
+        <p style="font-size: 20px"> Question {{ forloop.counter }} </p>
         {% if question.questionPicture %}
             <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
         {% endif %}
@@ -16,8 +20,14 @@
            <p style="font-size: 20px">{{ question.questionText|linebreaksbr }}</p>
         {% endif %}
         <p class="left">Answer: {{ question.answer }}</p>
-    </div>
+        <input type="input" name="answer{{ forloop.counter }}" placeholder="Type Answer Here">
 
+    </div>
 {% endfor %}
 
+
+<input style="display: block; margin: auto; margin-bottom: 60px; left: 0; right: 0;" type="submit" name="submitAnswer" value="Submit Answers" class="btn btn-blue"/>
+</form>
+
+<script src="{% static 'js/timer.js' %}"></script>
 {% endblock %}
