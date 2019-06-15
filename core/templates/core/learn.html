@@ -1,5 +1,5 @@
-
 {% extends 'core/Nav_Bar_Layout.html' %}
+{% load staticfiles %}
 
 {% block content %}
 
@@ -10,7 +10,12 @@
     {% for post in topicDescriptions %}
         <div class="onePost">
           <h4 style="font-weight: bold">{{ post.0}}</h4>
-          <br><br>
+          <img id="toggle{{ forloop.counter }}" class="img-fluid" style="float: right;margin: auto; margin-right: 20px;" src="{% static 'css/plus.png' %}" width="40" height="40">
+{#          <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">Take Test</button>#}
+
+          <div id="content{{ forloop.counter }}" style="display: none">
+            <br><br>
+
             {% if post.1 %}
                <p>{{ post.1|linebreaksbr }}</p>
             {% endif %}
@@ -38,8 +43,33 @@
             {% if post.7 %}
                <p>{{ post.7|linebreaksbr }}</p>
             {% endif %}
+          </div>
+
         </div>
     {% endfor %}
 </div>
 
+<script>
+
+    var counter = 1;
+    while (document.getElementById("toggle"+counter)) {
+        $("#toggle"+counter).click(function(){
+            console.log(this.src.includes("plus.png"));
+          var id = this.id.substring(6);
+          if (this.src.includes("plus.png")) {
+              this.src = this.src.replace("plus.png", "minus.png");
+              document.getElementById("content"+id).style.display = "block";
+          } else {
+              this.src = this.src.replace("minus.png", "plus.png");
+              document.getElementById("content"+id).style.display = "none";
+          }
+
+        });
+        counter++;
+    }
+
+</script>
+
 {% endblock %}
+
+
