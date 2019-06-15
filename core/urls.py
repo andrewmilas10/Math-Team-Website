@@ -24,5 +24,7 @@ urlpatterns = [
     url(r'^practice_topics_detail/(?P<topic>[a-zA-Z0-9, -]+)/$', views.practice_topics_detail, name='practice_topics_detail'),
     url(r'^practice_tests_detail/(?P<topic>[a-zA-Z0-9, -]+)/$', views.practice_tests_detail, name='practice_tests_detail'),
     url(r'^practice_tests_take/(?P<topic>[a-zA-Z0-9, -]+)/$', views.practice_tests_take, name='practice_tests_take'),
-    url(r'^reset/(?P<topic>[a-zA-Z0-9, -]+)/(?P<category>[0-9]+)/$', views.reset, name='reset')
+    url(r'^reset/(?P<topic>[a-zA-Z0-9, -]+)/(?P<category>[0-9]+)/$', views.reset, name='reset'),
+    url(r'^start_timer$', views.start_timer, name='start_timer'),
+    url(r'^end_timer$', views.end_timer, name='end_timer')
 ]

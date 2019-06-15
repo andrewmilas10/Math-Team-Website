@@ -6,14 +6,36 @@
 <h1 class = "banner" id="title">{{ title }}</h1>
 <br>
 
-{% for key, value, calcAllowed in testInfo %}
+{% for key, value, calcAllowed, time in testInfo %}
   <div class="questionList" style="text-align: left">
     <br>
-    <a href="{% url 'core:practice_tests_take' key%}">
       <p class="inlinep">{{ key }}</p>
-      <p class="inlinep" style="float: right; margin-right: 20px">Score: {{ value }}</p>
-      <p style="font-size: 20px; color: blue; margin-left: 10px;">{{ calcAllowed }}</p>
-    </a>
+      {% if time == "0" %}
+        <a style="text-align: center" href="{% url 'core:practice_tests_take' key%}">
+            <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">Take Test</button>
+        </a>
+        <br><br>
+        <p style="display: inline; font-size: 20px; color: blue; margin-left: 10px;">{{ calcAllowed }}</p>
+        <p class="inlinep" style="float: right; margin-right: 30px; font-size: 20px; ">Score: {{ value }}</p>
+      {% elif time == "-1" %}
+        <a style="text-align: center" href="{% url 'core:practice_tests_take' key%}">
+            <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">View Solutions</button>
+        </a>
+        <a style="text-align: center" href="{% url 'core:practice_tests_take' key%}">
+            <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">Retake Test</button>
+        </a>
+        <br><br>
+        <p style="display: inline; font-size: 20px; color: blue; margin-left: 10px;">{{ calcAllowed }}</p>
+        <p class="inlinep" style="float: right; margin-right: 30px; font-size: 20px; ">Score: {{ value }}</p>
+      {% else %}
+        <a style="text-align: center" href="{% url 'core:practice_tests_take' key%}">
+            <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">Continue Test</button>
+        </a>
+        <br><br>
+        <p style="display: inline; font-size: 20px; color: blue; margin-left: 10px;">{{ calcAllowed }}</p>
+        <p class="inlinep" style="float: right; margin-right: 30px; font-size: 20px; ">Test In Progress</p>
+      {% endif %}
+
   </div>
 {% endfor %}
 

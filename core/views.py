@@ -11,6 +11,8 @@ from .forms import UserForm
 import json
 import operator
 import random
+from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Q
 
@@ -374,7 +376,9 @@ def practice_tests(request, category):
 def practice_tests_detail(request, topic):
     global activeNav;
     user = request.user
+    print(request.POST.get('answers'))
     testProgress = json.loads(user.profile.testProgress)
+    testTime = json.loads(user.profile.testTime)
     testInfo = []
     for num in testProgress.items():
         print(num[0], num[0][5:], topic)
@@ -383,8 +387,9 @@ def practice_tests_detail(request, topic):
                 calcAllowed = "Calculator Allowed"
             else:
                 calcAllowed = "No Calculator"
-            testInfo.append([num[0], str(num[1])+"/5", calcAllowed])
-    print(testInfo)
+            print(str(testTime[num[0]]))
+            testInfo.append([num[0], str(num[1])+"/5", calcAllowed, str(testTime[num[0]])])
+
     return render(request, 'core/practice_tests_detail.html', {'title': topic, 'testInfo': testInfo, "activeNav": activeNav})
 
 def questions(request, filter_by):
@@ -407,5 +412,54 @@ def questions(request, filter_by):
 def practice_tests_take(request, topic):
     global activeNav;
     user = request.user
+
+    submitAnswersButton = request.POST.get('submitAnswers')
+    backButton = request.POST.get('back')
+    if backButton:
+        return practice_tests_detail(request, topic[5:])
+    if submitAnswersButton:
+        answers = []
+        for i in range(1, 6):
+            answers.append(request.POST.get('answer'+str(i)))
+        return submit_practice_test(request, topic, answers)
+
+    testTime = json.loads(user.profile.testTime)
     questions = sorted(Question.objects.filter(topic__in=[topic[5:]]).filter(year = topic[:4]), key=lambda t: t.difficulty)
-    return render(request, 'core/practice_tests_take.html', {'title': topic, 'questions': questions, "activeNav": activeNav})
+
+    return render(request, 'core/practice_tests_take.html', {'title': topic, 'questions': questions, "activeNav": activeNav, "end": testTime[topic]})
+
+def start_timer(request):
+    user = request.user
+    testTime = json.loads(user.profile.testTime)
+    testTime[request.POST.get('topic')] = request.POST.get('end')
+    user.profile.testTime = json.dumps(testTime)
+    user.profile.save()
+    return HttpResponse()
+
+def end_timer(request):
+    text = submit_practice_test(request, request.POST.get('topic'), request.POST.get("answers").split(","))
+    return HttpResponse(text)
+
+def submit_practice_test(request, topic, answers):
+    print(topic, answers)
+    user = request.user
+    testTime = json.loads(user.profile.testTime)
+    testTime[topic] = "-1"
+    user.profile.testTime = json.dumps(testTime)
+
+    questions = sorted(Question.objects.filter(topic__in=[topic[5:]]).filter(year=topic[:4]),key=lambda t: t.difficulty)
+    numCorrect = 0
+    for i in range(len(questions)):
+        if answers[i].replace(" ", "") in questions[i].answer.replace(" ", "").split("@"):
+            numCorrect += 1
+
+    testProgress = json.loads(user.profile.testProgress)
+    testProgress[topic] = numCorrect
+    user.profile.testProgress = json.dumps(testProgress)
+
+    user.profile.save()
+
+    if (request.is_ajax()):
+        return "You scored "+str(numCorrect)+"/5 correct"
+
+    return practice_tests_detail(request, topic[5:])

@@ -83,7 +83,7 @@ class Profile(models.Model):
         'RAND Ratios, Proportions and Percents'
     )
     testDict = "{"
-    # topicDict2 = "{"
+    # testDict2 = "{"
     # topicDict3 = "{"
     # topicDict4 = "{"
     # topicDict4 = "{"
@@ -91,7 +91,7 @@ class Profile(models.Model):
     i = 0
     for topic in TEST_LIST:
         testDict += "\"" + topic + "\": 0,"
-        # topicDict2 += "\"" + topic + "\": 3,"
+        # testDict2 += "\"" + topic + "\": 0,"
         # topicDict3 += "\"" + topic + "\": \"N\","
         # topicDict4 += "\"" + topic + "\": \"F\","
         # topicDict5 += "\"" + topic + "\": " + str(i) + ","
@@ -103,6 +103,8 @@ class Profile(models.Model):
     # topicDict4 = topicDict4[:-1] + "}"
     # topicDict5 = topicDict5[:-1] + "}"
     testProgress = models.CharField(max_length=9999, default=testDict)
+    testTime = models.CharField(max_length=99999999999, default=testDict)
+
     # attempts = models.CharField(max_length=1000, default=topicDict2)
     # currQuestions = models.CharField(max_length=1000, default=topicDict3)
     # currCorrect = models.CharField(max_length=1000, default=topicDict4)
