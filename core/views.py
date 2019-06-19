@@ -424,9 +424,14 @@ def practice_tests_take(request, topic):
         return submit_practice_test(request, topic, answers)
 
     testTime = json.loads(user.profile.testTime)
+    currAnswers = json.loads(user.profile.testAnswers)[topic]
+    print(currAnswers)
     questions = sorted(Question.objects.filter(topic__in=[topic[5:]]).filter(year = topic[:4]), key=lambda t: t.difficulty)
 
-    return render(request, 'core/practice_tests_take.html', {'title': topic, 'questions': questions, "activeNav": activeNav, "end": testTime[topic]})
+    if request.POST.get('viewSolutions'):
+        return render(request, 'core/practice_tests_take.html',
+                      {'viewSolutions': 1, 'title': topic, 'questions': questions, "activeNav": activeNav, "end": testTime[topic], 'currAnswers': str(currAnswers)[1:-1]})
+    return render(request, 'core/practice_tests_take.html', {'viewSolutions': 0, 'title': topic, 'questions': questions, "activeNav": activeNav, "end": testTime[topic], 'currAnswers': str(currAnswers)[1:-1]})
 
 def start_timer(request):
     user = request.user
@@ -439,6 +444,14 @@ def start_timer(request):
 def end_timer(request):
     text = submit_practice_test(request, request.POST.get('topic'), request.POST.get("answers").split(","))
     return HttpResponse(text)
+
+def edit_answers(request):
+    user = request.user
+    testAnswers = json.loads(user.profile.testAnswers)
+    testAnswers[request.POST.get('topic')][int(request.POST.get('id'))-1] = request.POST.get('answer')
+    user.profile.testAnswers = json.dumps(testAnswers)
+    user.profile.save()
+    return HttpResponse()
 
 def submit_practice_test(request, topic, answers):
     print(topic, answers)

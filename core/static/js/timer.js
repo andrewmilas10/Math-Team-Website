@@ -2,19 +2,13 @@ end = Number(end);
 
 // this example takes 2 seconds to run
 // var end = Date.now()+.5*60*1000;
-if (end == "0" || end == "-1") {
+console.log(end)
+if (end == 0 || end == -1) {
     end = Date.now()+.2*60*1000;
 }
+
 console.log("starting timer...");
 // expected output: starting timer...
-
- $.ajax({
-        type: "POST",
-        url: "/start_timer",
-        data: {csrfmiddlewaretoken: token,
-              end: ""+end,
-              topic: topic},   /* Passing the text data */
-});
 
 function changeTimer() {
     var timer = document.getElementById("timer");
@@ -50,7 +44,55 @@ function changeTimer() {
     }
 }
 
-changeTimer();
+if (! Number(viewSolutions)) {
+     $.ajax({
+        type: "POST",
+        url: "/start_timer",
+        data: {csrfmiddlewaretoken: token,
+              end: ""+end,
+              topic: topic},   /* Passing the text data */
+    });
+
+    var counter = 1;
+    while (document.getElementById("answer"+counter)) {
+        // if (currAnswers[counter-1])
+        document.getElementById("answer"+counter).value = currAnswers.split(",")[counter-1].replace(/'/g, "");
+        $("#answer"+counter).on('input', function(){
+            var id = this.id.substring(6);
+            console.log(this.value);
+            $.ajax({
+                type: "POST",
+                url: "/edit_answers",
+                data: {csrfmiddlewaretoken: token,
+                      answer: this.value,
+                      id: id,
+                      topic: topic},   /* Passing the text data */
+            });
+
+        });
+        counter++;
+    }
+
+    changeTimer();
+} else {
+    var counter = 1;
+    while (document.getElementById("solutionBtn"+counter)) {
+        document.getElementById("answer"+counter).value = currAnswers.split(",")[counter-1].replace(/'/g, "");
+        document.getElementById("answer"+counter).disabled = true;
+        $("#solutionBtn"+counter).click(function(){
+            var id = this.id.substring(11);
+            console.log(id);
+            this.style.display = "none";
+            document.getElementById("solution"+id).style.display = "block";
+
+        });
+        counter++;
+    }
+}
+
+
+
+
 
 
 

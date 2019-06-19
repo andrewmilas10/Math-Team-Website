@@ -4,7 +4,7 @@
 {% block content %}
 
 <h1 class = "banner" id="title">{{ title }}</h1>
-<h1 style="text-align: center; font-size: 45px; margin-top: 10px" id="timer">Time: 30:00</h1>
+<h1 style="text-align: center; font-size: 45px; margin-top: 10px" id="timer">Time: 0:00</h1>
 
 <form action="{% url 'core:practice_tests_take' title%}" method="post" role="form">
 {% csrf_token %}
@@ -28,18 +28,34 @@
         {% endif %}
         <p class="left">Answer: {{ question.answer }}</p>
         <input type="input" id="answer{{ forloop.counter }}" name="answer{{ forloop.counter }}" placeholder="Type Answer Here">
+        {%  if viewSolutions %}
+            <div id="solutionBtn{{ forloop.counter }}" class="btn btn-blue" style="display: block; width: 150px; margin: auto; margin-top: 15px; left: 0; right: 0;">View Solution</div>
+            <div id = "solution{{ forloop.counter }}" style="margin: auto; display: none">
+                {% if question.answerPicture %}
+                    <img class="img-fluid" src="{{ question.answerPicture.url }}" width="1000" height="500">
+                {% endif %}
+                {% if question.answerText %}
+                   <p style="font-size: 20px">{{ question.answerText|linebreaksbr }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
 
     </div>
 {% endfor %}
 
-
-<input id="submit" style="display: block; margin: auto; margin-bottom: 60px; left: 0; right: 0;" type="submit" name="submitAnswers" value="Submit Answers" class="btn btn-blue"/>
+{%  if viewSolutions %}
+    <input style="display: block; margin: auto; margin-bottom: 60px; left: 0; right: 0;" type="submit" name="back" value="Back" class="btn btn-blue"/>
+{% else %}
+    <input id="submit" style="display: block; margin: auto; margin-bottom: 60px; left: 0; right: 0;" type="submit" name="submitAnswers" value="Submit Answers" class="btn btn-blue"/>
+{% endif %}
 </form>
 
 <script>
     var end = "{{ end }}";
     var topic = "{{ title }}";
-    var token = "{{ csrf_token }}"
+    var token = "{{ csrf_token }}";
+    var viewSolutions = "{{ viewSolutions }}";
+    var currAnswers = {% autoescape off %} "{{ currAnswers }}" {% endautoescape %};
 </script>
 
 <script src="{% static 'js/timer.js' %}"></script>
