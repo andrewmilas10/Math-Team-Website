@@ -29,10 +29,11 @@
         <p class="left">Answer: {{ question.answer }}</p>
         <input type="input" id="answer{{ forloop.counter }}" name="answer{{ forloop.counter }}" placeholder="Type Answer Here">
         {%  if viewSolutions %}
+            <img id="correct{{ forloop.counter }}" class="img-fluid" style="position: absolute; margin-left: 20px;" src="{% static 'css/incorrect.png' %}" width="30" height="40">
             <div id="solutionBtn{{ forloop.counter }}" class="btn btn-blue" style="display: block; width: 150px; margin: auto; margin-top: 15px; left: 0; right: 0;">View Solution</div>
             <div id = "solution{{ forloop.counter }}" style="margin: auto; display: none">
                 {% if question.answerPicture %}
-                    <img class="img-fluid" src="{{ question.answerPicture.url }}" width="1000" height="500">
+                    <img style="margin-top: 20px" class="img-fluid" src="{{ question.answerPicture.url }}" width="1000" height="500">
                 {% endif %}
                 {% if question.answerText %}
                    <p style="font-size: 20px">{{ question.answerText|linebreaksbr }}</p>
@@ -56,7 +57,8 @@
     var token = "{{ csrf_token }}";
     var viewSolutions = "{{ viewSolutions }}";
     var currAnswers = {% autoescape off %} "{{ currAnswers }}" {% endautoescape %};
+    var distribution = {% autoescape off %} "{{ distribution }}" {% endautoescape %};
 </script>
 
-<script src="{% static 'js/timer.js' %}"></script>
+<script src="{% static 'js/practice_tests_take.js' %}"></script>
 {% endblock %}

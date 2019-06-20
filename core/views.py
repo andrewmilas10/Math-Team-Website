@@ -424,14 +424,21 @@ def practice_tests_take(request, topic):
         return submit_practice_test(request, topic, answers)
 
     testTime = json.loads(user.profile.testTime)
-    currAnswers = json.loads(user.profile.testAnswers)[topic]
+    currAnswers = json.loads(user.profile.testAnswers)
+    if not request.POST.get('viewSolutions') and int(testTime[topic]) <= 0:
+        currAnswers[topic] = ['', '', '', '', '']
+        user.profile.testAnswers = json.dumps(currAnswers)
+        user.profile.save()
     print(currAnswers)
     questions = sorted(Question.objects.filter(topic__in=[topic[5:]]).filter(year = topic[:4]), key=lambda t: t.difficulty)
 
     if request.POST.get('viewSolutions'):
         return render(request, 'core/practice_tests_take.html',
-                      {'viewSolutions': 1, 'title': topic, 'questions': questions, "activeNav": activeNav, "end": testTime[topic], 'currAnswers': str(currAnswers)[1:-1]})
-    return render(request, 'core/practice_tests_take.html', {'viewSolutions': 0, 'title': topic, 'questions': questions, "activeNav": activeNav, "end": testTime[topic], 'currAnswers': str(currAnswers)[1:-1]})
+                      {'viewSolutions': 1, 'title': topic, 'questions': questions, "activeNav": activeNav, "end": testTime[topic],
+                       'currAnswers': str(currAnswers[topic])[1:-1], "distribution": str(json.loads(user.profile.testDistribution)[topic])[1:-1]})
+    return render(request, 'core/practice_tests_take.html',
+                  {'viewSolutions': 0, 'title': topic, 'questions': questions, "activeNav": activeNav, "end": testTime[topic],
+                   'currAnswers': str(currAnswers[topic])[1:-1], "distribution": str(json.loads(user.profile.testDistribution)[topic])[1:-1]})
 
 def start_timer(request):
     user = request.user
@@ -462,14 +469,20 @@ def submit_practice_test(request, topic, answers):
 
     questions = sorted(Question.objects.filter(topic__in=[topic[5:]]).filter(year=topic[:4]),key=lambda t: t.difficulty)
     numCorrect = 0
+    distribution = []
     for i in range(len(questions)):
         if answers[i].replace(" ", "") in questions[i].answer.replace(" ", "").split("@"):
             numCorrect += 1
+            distribution.append(1)
+        else:
+            distribution.append(0)
 
     testProgress = json.loads(user.profile.testProgress)
     testProgress[topic] = numCorrect
     user.profile.testProgress = json.dumps(testProgress)
-
+    testDistribution = json.loads(user.profile.testDistribution)
+    testDistribution[topic] = distribution
+    user.profile.testDistribution = json.dumps(testDistribution)
     user.profile.save()
 
     if (request.is_ajax()):

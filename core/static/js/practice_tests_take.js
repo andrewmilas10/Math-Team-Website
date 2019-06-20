@@ -2,8 +2,9 @@ end = Number(end);
 
 // this example takes 2 seconds to run
 // var end = Date.now()+.5*60*1000;
-console.log(end)
+console.log(end);
 if (end == 0 || end == -1) {
+    var isRestarting = true;
     end = Date.now()+.2*60*1000;
 }
 
@@ -17,7 +18,11 @@ function changeTimer() {
     if (seconds < 10) {
         seconds = "0"+seconds
     }
-    timer.innerText = "Time: "+Math.floor(millis/60000)+":"+seconds;
+    if (millis <= 1000) {
+        timer.innerText = "Time: 0:00";
+    } else {
+        timer.innerText = "Time: "+Math.floor(millis/60000)+":"+seconds;
+    }
     console.log("seconds left = " + Math.floor(millis/1000));
     if (millis <= 1000) {
         var answers = [];
@@ -56,10 +61,12 @@ if (! Number(viewSolutions)) {
     var counter = 1;
     while (document.getElementById("answer"+counter)) {
         // if (currAnswers[counter-1])
-        document.getElementById("answer"+counter).value = currAnswers.split(",")[counter-1].replace(/'/g, "");
+        if (!isRestarting && currAnswers.split(",")[counter-1].replace(" ", "") != "''" ) {
+            document.getElementById("answer"+counter).value = currAnswers.split(",")[counter-1].replace(/'/g, "");
+        }
+
         $("#answer"+counter).on('input', function(){
             var id = this.id.substring(6);
-            console.log(this.value);
             $.ajax({
                 type: "POST",
                 url: "/edit_answers",
@@ -77,8 +84,17 @@ if (! Number(viewSolutions)) {
 } else {
     var counter = 1;
     while (document.getElementById("solutionBtn"+counter)) {
-        document.getElementById("answer"+counter).value = currAnswers.split(",")[counter-1].replace(/'/g, "");
+        console.log(currAnswers.split(",")[counter-1]);
+        console.log(currAnswers.split(",")[counter-1].replace(" ", "") == "''");
+        if (currAnswers.split(",")[counter-1].replace(" ", "") != "''" ) {
+            document.getElementById("answer"+counter).value = currAnswers.split(",")[counter-1].replace(/'/g, "");
+        }
         document.getElementById("answer"+counter).disabled = true;
+        if (Number(distribution.split(",")[counter-1])) {
+            var pic = document.getElementById("correct"+counter);
+            pic.src = pic.src.replace("incorrect.png", "correct.png");
+            pic.style.width = "40px";
+        }
         $("#solutionBtn"+counter).click(function(){
             var id = this.id.substring(11);
             console.log(id);
@@ -89,12 +105,4 @@ if (! Number(viewSolutions)) {
         counter++;
     }
 }
-
-
-
-
-
-
-
-
 

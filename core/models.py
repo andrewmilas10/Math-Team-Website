@@ -84,7 +84,7 @@ class Profile(models.Model):
     )
     testDict = "{"
     testDict2 = "{"
-    # topicDict3 = "{"
+    testDict3 = "{"
     # topicDict4 = "{"
     # topicDict4 = "{"
     # topicDict5 = "{"
@@ -92,6 +92,7 @@ class Profile(models.Model):
     for topic in TEST_LIST:
         testDict += "\"" + topic + "\": 0,"
         testDict2 += "\"" + topic + "\": [\"\", \"\", \"\", \"\", \"\"],"
+        testDict3 += "\"" + topic + "\": [0, 0, 0, 0, 0],"
         # topicDict3 += "\"" + topic + "\": \"N\","
         # topicDict4 += "\"" + topic + "\": \"F\","
         # topicDict5 += "\"" + topic + "\": " + str(i) + ","
@@ -99,12 +100,14 @@ class Profile(models.Model):
 
     testDict = testDict[:-1] + "}"
     testDict2 = testDict2[:-1] + "}"
+    testDict3 = testDict3[:-1] + "}"
     # topicDict3 = topicDict3[:-1] + "}"
     # topicDict4 = topicDict4[:-1] + "}"
     # topicDict5 = topicDict5[:-1] + "}"
     testProgress = models.CharField(max_length=9999, default=testDict)
     testTime = models.CharField(max_length=99999999999, default=testDict)
     testAnswers = models.CharField(max_length=999, default=testDict2)
+    testDistribution = models.CharField(max_length=999, default=testDict3)
 
 
     # attempts = models.CharField(max_length=1000, default=topicDict2)
