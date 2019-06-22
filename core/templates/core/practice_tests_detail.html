@@ -11,29 +11,31 @@
   {% csrf_token %}
   {{ form.as_p }}
 
-  <div class="questionList" style="text-align: left">
+  <div class="questionList" style="text-align: left; padding-top: 0; ">
     <br>
-      <p class="inlinep">{{ key }}</p>
+      <p class="test-detail-p" style="font-size: 22px;padding-top: 6px">{{ key }}</p>
+
+      {# Taking test for the first time #}
       {% if time == "0" %}
-        <input style="float: right;margin: auto; margin-right: 20px; font-size: 20px" type="submit" name="takeTest" value="Take Test" class="btn btn-blue"/>
-{#        <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">Take Test</button>#}
+        <input style="float: right;margin: auto; margin-right: 17px; font-size: 18px" type="submit" name="takeTest" value="Take Test" class="btn btn-blue"/>
         <br><br>
         <p style="display: inline; font-size: 20px; color: blue; margin-left: 10px;">{{ calcAllowed }}</p>
-        <p class="inlinep" style="float: right; margin-right: 30px; font-size: 20px; ">Score: {{ value }}</p>
+        <p class="test-detail-p" style="float: right; margin-right: 21px; font-size: 20px; ">Score: {{ value }}</p>
+
+      {#  Took test and can now view solutions #}
       {% elif time == "-1" %}
-        <input style="float: right;margin: auto; margin-right: 20px; font-size: 20px" type="submit" name="viewSolutions" value="View Solutions" class="btn btn-blue"/>
-        <input style="float: right;margin: auto; margin-right: 20px; font-size: 20px" type="submit" name="takeTest" value="Retake Test" class="btn btn-blue"/>
-{#            <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">View Solutions</button>#}
-{#            <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">Retake Test</button>#}
+        <input style="float: right;margin: auto; margin-right: 17px; font-size: 18px" type="submit" name="viewSolutions" value="View Solutions" class="btn btn-blue"/>
+        <input style="float: right;margin: auto; margin-right: 15px; font-size: 18px" type="submit" name="takeTest" value="Retake Test" class="btn btn-blue"/>
         <br><br>
         <p style="display: inline; font-size: 20px; color: blue; margin-left: 10px;">{{ calcAllowed }}</p>
-        <p class="inlinep" style="float: right; margin-right: 30px; font-size: 20px; ">Score: {{ value }}</p>
+        <p class="test-detail-p" style="float: right; margin-right: 21px; font-size: 20px; ">Score: {{ value }}</p>
+
+      {# Currently taking test #}
       {% else %}
-        <input style="float: right;margin: auto; margin-right: 20px; font-size: 20px" type="submit" name="takeTest" value="Continue Test" class="btn btn-blue"/>
-{#            <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">Continue Test</button>#}
+        <input style="float: right;margin: auto; margin-right: 17px; font-size: 18px" type="submit" name="takeTest" value="Continue Test" class="btn btn-blue"/>
         <br><br>
         <p style="display: inline; font-size: 20px; color: blue; margin-left: 10px;">{{ calcAllowed }}</p>
-        <p class="inlinep" style="float: right; margin-right: 30px; font-size: 20px; ">Test In Progress</p>
+        <p class="test-detail-p" style="float: right; margin-right: 21px; font-size: 20px; ">Test In Progress</p>
       {% endif %}
 
   </div>

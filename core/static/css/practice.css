@@ -130,6 +130,20 @@ fieldset[disabled] .btn-blue.active {
   font-size: 20px;
   color: #515151;
 }
+
+.test-detail-p{
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 20px;
+}
+
+.inlineh{
+  display: inline-block;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  font-size: 25px;
+}
+
 a{
   text-decoration: none !important;
 }

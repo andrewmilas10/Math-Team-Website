@@ -16,33 +16,42 @@
     <link rel="stylesheet" href="{% static 'css/question.css' %}">
     <link rel="stylesheet" href="{% static 'css/practice.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
-
-{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">#}
-{#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">#}
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-
     <style>
-        html, body {
-            max-width: 100%;
-            min-height: 89vh;
-            position: relative;
-            {#overflow-x: hidden;#}
+        html {
+          height: 100%;
+          box-sizing: border-box;
+        }
+
+        *,
+        *:before,
+        *:after {
+          box-sizing: inherit;
+        }
+
+        body {
+          position: relative;
+          margin: 0;
+          padding-bottom: 6rem;
+          min-height: 100%;
         }
     </style>
 </head>
 <body>
+
   <nav class="navbar navbar-expand navbar-light bg-light">
 
-    <div  class="navbar-nav"> {# height: 74#}
-          <span class="navbar-brand">Conant Math Team</span>
+    <div  class="navbar-nav">
+
+          <div style="text-align: center">
+              <span class="navbar-brand">Conant Math Team</span>
+              <img src="{% static 'css/chs.png' %}" style="margin-right: 10px" alt = "conant logo" width="40px" height="40px">
+          </div>
+
           <a {% ifequal activeNav "0" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:homepage' %}">Home<span class="sr-only">(current)</span></a>
           <a {% ifequal activeNav "1" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:post_list' %}">Updates</a>
-{#          <a {% ifequal activeNav "5" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:learn' %}">Learn</a>#}
           <a {% ifequal activeNav "2" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:question_list' %}">Problems</a>
-{#          <a {% ifequal activeNav "3" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:practice_topics' %}">Practice Topics</a>#}
-
-
 
           <div class="dropdown">
               <a  {% ifequal activeNav "5" %}class="nav-link active dropdown-toggle" {% else %} class = "nav-link dropdown-toggle" {% endifequal %}
@@ -101,11 +110,13 @@
     </div>
 </nav>
 
-  <div>
-      {% block content %}
-      {% endblock %}
-  </div>
-{#  <br>#}
-{#    <footer id="footer" style="position: absolute; height: 40px; padding-top: 40px; padding-bottom: 19px" >©2018 Created by Nisha Pant and Andrew Milas</footer>#}
+<div>
+  {% block content %}
+  {% endblock %}
+</div>
+
+<footer id="footer" style="position: absolute; right: 0; bottom: 0; left: 0; padding: 1rem; background-color: #efefef; text-align: center;" >©2019 Created by Nisha Pant and Andrew Milas</footer>
+
+
 </body>
 </html>

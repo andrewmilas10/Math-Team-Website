@@ -3,15 +3,13 @@
 
 {% block content %}
 
-<h1 class = "banner" id="title">{{ title }}</h1>
+<h1 class = "banner bold" id="title">{{ title }}</h1>
 <br>
 
 {% for key, value, color in progress %}
   <div class="questionList">
     <br>
-{#    <a href="{% url 'core:practice_tests_detail' key%}">#}
-    <p class="inlinep">Topic: {{ key }}</p>
-{#    </a>#}
+    <h4 class="inlineh" style="font-weight: bold">Topic: {{ key }}</h4>
     <br>
     <a href="{% url 'core:practice_tests_detail' key%}">
         <button class="btn btn-blue" style="margin: 0px">View Tests</button>

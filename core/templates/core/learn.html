@@ -10,7 +10,7 @@
     {% for post in topicDescriptions %}
         <div class="onePost">
           <h4 style="font-weight: bold">{{ post.0}}</h4>
-          <img id="toggle{{ forloop.counter }}" class="img-fluid" style="float: right;margin: auto; margin-right: 20px;" src="{% static 'css/plus.png' %}" width="40" height="40">
+          <img id="toggle{{ forloop.counter }}" class="img-fluid" style="float: right;margin: auto; margin-right: 20px;" src="{% static 'css/plus.png' %}" alt="Content Toggle" width="40" height="40">
 {#          <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">Take Test</button>#}
 
           <div id="content{{ forloop.counter }}" style="display: none">

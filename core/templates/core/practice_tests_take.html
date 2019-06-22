@@ -19,7 +19,7 @@
 
 {% for question in questions %}
     <div class="questionList">
-        <p style="font-size: 20px"> Question {{ forloop.counter }} </p>
+        <h4 class="inlineh" style="font-weight: bold; margin-top: 20px; margin-bottom: 0px"> Question {{ forloop.counter }} </h4>
         {% if question.questionPicture %}
             <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
         {% endif %}
@@ -45,9 +45,9 @@
 {% endfor %}
 
 {%  if viewSolutions %}
-    <input style="display: block; margin: auto; margin-bottom: 60px; left: 0; right: 0;" type="submit" name="back" value="Back" class="btn btn-blue"/>
+    <input style="display: block; margin: auto; margin-bottom: 0px; left: 0; right: 0;" type="submit" name="back" value="Back" class="btn btn-blue"/>
 {% else %}
-    <input id="submit" style="display: block; margin: auto; margin-bottom: 60px; left: 0; right: 0;" type="submit" name="submitAnswers" value="Submit Answers" class="btn btn-blue"/>
+    <input id="submit" style="display: block; margin: auto; margin-bottom: 0px; left: 0; right: 0;" type="submit" name="submitAnswers" value="Submit Answers" class="btn btn-blue"/>
 {% endif %}
 </form>
 

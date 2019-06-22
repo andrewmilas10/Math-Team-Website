@@ -5,10 +5,10 @@
     <h1 id="title">Conant Math Team Updates</h1>
     <div id="posts">
     {% for post in posts %}
-        <div class="questionList" style="text-align: left;">
-          <h4 style="margin-left: 20px; font-weight: bold">{{ post.title }}</h4>
+        <div class="questionList" style="text-align: left; padding-bottom: 5px">
+          <h4 style="padding-top: 10px; margin-left: 20px; font-weight: bold">{{ post.title }}</h4>
           <p class="inline" style="float: right; margin-right: 20px">{{ post.published_date }}</p>
-          <p style="margin-left: 20px">{{ post.text|linebreaksbr }}</p>
+          <p style="margin-top: 20px; margin-left: 20px">{{ post.text|linebreaksbr }}</p>
           <p style="margin-left: 25px"> --- {{ post.author }}</p>
         </div>
     {% endfor %}
