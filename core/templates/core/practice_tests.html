@@ -9,8 +9,12 @@
 {% for key, value, color in progress %}
   <div class="questionList">
     <br>
+{#    <a href="{% url 'core:practice_tests_detail' key%}">#}
+    <p class="inlinep">Topic: {{ key }}</p>
+{#    </a>#}
+    <br>
     <a href="{% url 'core:practice_tests_detail' key%}">
-      <p class="inlinep">Topic: {{ key }}</p>
+        <button class="btn btn-blue" style="margin: 0px">View Tests</button>
     </a>
   </div>
 {% endfor %}

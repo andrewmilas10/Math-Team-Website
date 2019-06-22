@@ -124,7 +124,7 @@ h3{
   margin: 0;
 }
 
-.dropdown-content {
+.dropdown-content{
   display: none;
   position: absolute;
   background-color: #f9f9f9;
@@ -152,6 +152,6 @@ a:hover, .dropdown:hover {
   color: black;
 }
 
-.dropdown:hover .dropdown-content {
-  display: block;
-}
+/*.dropdown:hover .dropdown-content {*/
+  /*display: block;*/
+/*}*/

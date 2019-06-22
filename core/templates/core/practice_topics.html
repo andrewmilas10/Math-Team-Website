@@ -7,18 +7,21 @@
 <br>
 
 {% for key, value, color in progress %}
-  <div class="questionList">
+  <div class="questionList" >
     <br>
-    <a href="{% url 'core:practice_topics_detail' key%}">
+{#    <a href="{% url 'core:practice_topics_detail' key%}">#}
       <p class="inlinep">Topic: {{ key }}</p>
         <div class="progress" style="width: 75%; margin: auto">
             <div class="{{ color }}" style="width:{{ value }}%"></div>
         </div><br>
-      <span class = "inlinep" style="font-size: 20px; color: blue; margin-right: 20px" id="status">{{  value }}%</span>
+      <span class = "inlinep" style="font-size: 20px; color: blue; margin-right: 10px" id="status">{{  value }}%</span>
+      <a href="{% url 'core:practice_topics_detail' key%}">
+        <button class="btn btn-blue" style="margin: 0px; margin-right: 10px">Practice</button>
+      </a>
       <a href="{% url 'core:reset' key category%}">
         <button class="btn btn-blue" style="margin: 0px">Reset</button>
       </a>
-    </a>
+{#    </a>#}
   </div>
 {% endfor %}
 

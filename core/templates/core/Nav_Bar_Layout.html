@@ -16,16 +16,18 @@
     <link rel="stylesheet" href="{% static 'css/question.css' %}">
     <link rel="stylesheet" href="{% static 'css/practice.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">#}
+{#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">#}
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
     <style>
         html, body {
             max-width: 100%;
             min-height: 89vh;
             position: relative;
-            overflow-x: hidden;
-        }
-
-        ::-webkit-scrollbar {
-            display: none;
+            {#overflow-x: hidden;#}
         }
     </style>
 </head>
@@ -37,50 +39,53 @@
           <a {% ifequal activeNav "0" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:homepage' %}">Home<span class="sr-only">(current)</span></a>
           <a {% ifequal activeNav "1" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:post_list' %}">Updates</a>
 {#          <a {% ifequal activeNav "5" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:learn' %}">Learn</a>#}
-          <a {% ifequal activeNav "2" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:question_list' %}">Practice Problems</a>
+          <a {% ifequal activeNav "2" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:question_list' %}">Problems</a>
 {#          <a {% ifequal activeNav "3" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:practice_topics' %}">Practice Topics</a>#}
 
+
+
           <div class="dropdown">
-            <p {% ifequal activeNav "5" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %}>Learn
-              <i class="fa fa-caret-down"></i>
-            </p>
-            <div class="dropdown-content">
-              <a href="{% url 'core:learn' 0 'Freshman Topics'%}">Freshman</a>
-              <a href="{% url 'core:learn' 1 'Sophomore Topics'%}">Sophomore</a>
-              <a href="{% url 'core:learn' 2 'Junior Topics'%}">Junior</a>
-              <a href="{% url 'core:learn' 3 'Senior Topics'%}">Senior</a>
+              <a  {% ifequal activeNav "5" %}class="nav-link active dropdown-toggle" {% else %} class = "nav-link dropdown-toggle" {% endifequal %}
+                  style="cursor:pointer" id="navbardrop" data-toggle="dropdown">
+                Learn
+              </a>
+              <div class="dropdown-content dropdown-menu">
+                <a class="dropdown-item" href="{% url 'core:learn' 0 'Freshman Topics'%}">Freshman</a>
+                <a class="dropdown-item" href="{% url 'core:learn' 1 'Sophomore Topics'%}">Sophomore</a>
+                <a class="dropdown-item" href="{% url 'core:learn' 2 'Junior Topics'%}">Junior</a>
+                <a class="dropdown-item" href="{% url 'core:learn' 3 'Senior Topics'%}">Senior</a>
+              </div>
+            </div>
+
+          <div class="dropdown">
+            <a  {% ifequal activeNav "3" %}class="nav-link active dropdown-toggle" {% else %} class = "nav-link dropdown-toggle" {% endifequal %} style="cursor:pointer" id="navbardrop" data-toggle="dropdown">
+                Practice NSML
+            </a>
+            <div class="dropdown-content dropdown-menu">
+              <a class="dropdown-item" href="{% url 'core:practice_topics' 0%}">Freshman</a>
+              <a class="dropdown-item" href="{% url 'core:practice_topics' 1%}">Sophomore</a>
+              <a class="dropdown-item" href="{% url 'core:practice_topics' 2%}">Junior</a>
+              <a class="dropdown-item" href="{% url 'core:practice_topics' 3%}">Senior</a>
             </div>
           </div>
 
           <div class="dropdown">
-            <p {% ifequal activeNav "3" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %}>Practice NSML
-              <i class="fa fa-caret-down"></i>
-            </p>
-            <div class="dropdown-content">
-              <a href="{% url 'core:practice_topics' 0%}">Freshman</a>
-              <a href="{% url 'core:practice_topics' 1%}">Sophomore</a>
-              <a href="{% url 'core:practice_topics' 2%}">Junior</a>
-              <a href="{% url 'core:practice_topics' 3%}">Senior</a>
-            </div>
-          </div>
-
-          <div class="dropdown">
-              <p {% ifequal activeNav "4" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %}>Practice Regionals/State
-                <i class="fa fa-caret-down"></i>
-              </p>
-              <div class="dropdown-content">
-                <a href="{% url 'core:practice_topics' 4%}">Freshman</a>
-                <a href="{% url 'core:practice_topics' 5%}">Sophomore</a>
-                <a href="{% url 'core:practice_topics' 6%}">Junior</a>
-                <a href="{% url 'core:practice_topics' 7%}">Senior</a>
+              <a  {% ifequal activeNav "4" %}class="nav-link active dropdown-toggle" {% else %} class = "nav-link dropdown-toggle" {% endifequal %} style="cursor:pointer" id="navbardrop" data-toggle="dropdown">
+                Practice Regionals/State
+              </a>
+              <div class="dropdown-content dropdown-menu">
+                <a class="dropdown-item" href="{% url 'core:practice_topics' 4%}">Freshman</a>
+                <a class="dropdown-item" href="{% url 'core:practice_topics' 5%}">Sophomore</a>
+                <a class="dropdown-item" href="{% url 'core:practice_topics' 6%}">Junior</a>
+                <a class="dropdown-item" href="{% url 'core:practice_topics' 7%}">Senior</a>
               </div>
           </div>
 
           <div class="dropdown">
-              <p {% ifequal activeNav "6" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %}>Practice Tests
-                <i class="fa fa-caret-down"></i>
-              </p>
-              <div class="dropdown-content">
+              <a  {% ifequal activeNav "6" %}class="nav-link active dropdown-toggle" {% else %} class = "nav-link dropdown-toggle" {% endifequal %} style="cursor:pointer" id="navbardrop" data-toggle="dropdown">
+                Practice Tests
+              </a>
+              <div class="dropdown-content dropdown-menu">
                 <a href="{% url 'core:practice_tests' 0%}">Freshman</a>
                 <a href="{% url 'core:practice_tests' 1%}">Sophomore</a>
                 <a href="{% url 'core:practice_tests' 2%}">Junior</a>
@@ -93,16 +98,14 @@
             <h3 id="welcome">Welcome {{ user.username }}</h3>
           </div>
 
-
     </div>
-
 </nav>
 
   <div>
       {% block content %}
       {% endblock %}
   </div>
-    <footer id="footer" style="position: absolute; height: 40px; padding-top: 40px; padding-bottom: 19px" >©2018 Created by Nisha Pant and Andrew Milas</footer>
-
+{#  <br>#}
+{#    <footer id="footer" style="position: absolute; height: 40px; padding-top: 40px; padding-bottom: 19px" >©2018 Created by Nisha Pant and Andrew Milas</footer>#}
 </body>
 </html>
