@@ -82,6 +82,8 @@ fieldset[disabled] .btn-blue.active {
   width: 75%;
   margin: 18px auto;
   border-radius: 10px;
+  border-width: 5px;
+  border-style: solid;
   padding-top:10px;
   padding-bottom: 15px;
   padding-left: 7px;

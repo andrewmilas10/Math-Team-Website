@@ -108,7 +108,13 @@
   <div class="questionList">
     <br>
     <a href="{% url 'core:detail' question.id %}">
-      <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
+        {% if question.questionPicture %}
+            <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
+        {% endif %}
+        {% if question.questionText %}
+           <p class="left" style="color: black; font-size: 20px">{{ question.questionText|linebreaksbr }}</p>
+        {% endif %}
+{#      <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">#}
       <p class="inlinep">Topic: {{ question.topic }}</p>
       <p class="inlinep">Difficulty: {{ question.difficulty }}</p>
       <p class="inlinep">Year: {{ question.year }}</p>

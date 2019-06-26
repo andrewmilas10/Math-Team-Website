@@ -9,14 +9,32 @@
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/homepage.css' %}" type="text/css">
 </head>
+
+<style>
+    .header-main {
+        background-image: url("{% static 'css/mathBackground.png' %}");
+        padding: 30px;
+        text-align: center;
+    }
+
+    .header-main h1 {
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
 <body>
+  <header class="header-main">
+      <h1>Conant Math Team</h1>
+  </header>
   <div id="contact">
     <a href="mailto:rcortez@d211.org"><button class="btn btn-blue coach">Contact a coach</button></a>
   </div>
-  <div id="banner" class="align-middle align-baseline">
+  <div id="banner" class="align-middle align-baseline" style="padding-top: 8%">
     <div class="child">
         <h1>Start Practice Today</h1>
-        <h3>Conant Math Team</h3>
+{#        <h3>Conant Math Team</h3>#}
         <a href="{% url 'core:register' %}"><button class="btn btn-blue">Sign Up</button></a>
         <a href="{% url 'core:login_user' %}"><button class="btn btn-blue">Login</button></a>
     </div>

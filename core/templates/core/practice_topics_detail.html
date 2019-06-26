@@ -1,5 +1,6 @@
-
 {% extends 'core/Nav_Bar_Layout.html' %}
+{% load staticfiles %}
+
 {% block content %}
 
 <div class="questions-container">
@@ -18,41 +19,49 @@
             <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
         {% endif %}
         {% if question.questionText %}
-           <p style="font-size: 20px">{{ question.questionText|linebreaksbr }}</p>
+           <p class="left" style="font-size: 20px">{{ question.questionText|linebreaksbr }}</p>
         {% endif %}
-        <p class="left">Topic: {{ question.topic }}</p>
-        <p class="left">Difficulty: {{ question.difficulty }}</p>
-        <p class="left">Year: {{ question.year }}</p>
-        <p class="left">Grade: {{ question.grade }}</p>
+{#        <p class="left">Topic: {{ question.topic }}</p>#}
+{#        <p class="left">Difficulty: {{ question.difficulty }}</p>#}
+{#        <p class="left">Year: {{ question.year }}</p>#}
+{#        <p class="left">Grade: {{ question.grade }}</p>#}
         <p class="left">Answer: {{ question.answer }}</p>
 
-        {% if showSolutionButton %}
-            <div style="margin: auto">
+        {# Answered question #}
+        {% if correctAnswer or attempts == 0%}
+            <input type="input" name="answer" disabled = "true" style="margin-bottom: 15px" value="{{ currAnswer }}" placeholder="Type Answer Here">
+            {% if correctAnswer %}
+                <img class="img-fluid" style="position: absolute; margin-left: 20px;" src="{% static 'css/correct.png' %}" width="40" height="40">
+            {% else %}
+                <img class="img-fluid" style="position: absolute; margin-left: 20px;" src="{% static 'css/incorrect.png' %}" width="30" height="40">
+            {% endif %}
+
+            {% if correctAnswer %}
+                <p style="font-size: 20px">You are Correct</p>
+            {% else %}
+                <p style="font-size: 20px">You are Incorrect</p>
+            {% endif %}
+
+            <div id="solution" style="display: none; margin: auto">
+                <hr>
                 {% if question.answerPicture %}
                     <img class="img-fluid" src="{{ question.answerPicture.url }}" width="1000" height="500">
                 {% endif %}
                 {% if question.answerText %}
-                   <p style="font-size: 20px">{{ question.answerText|linebreaksbr }}</p>
+                   <p class="left" style="font-size: 20px">{{ question.answerText|linebreaksbr }}</p>
                 {% endif %}
             </div>
 
-
             <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
             {% csrf_token %}
             <input type="submit" name="nextQuestion" value="Next Question" class="btn btn-blue"/>
-            <input style="margin: 0px" type="submit" name="back" value="Back" class="btn btn-blue"/>
-            </form>
-
-        {% elif correctAnswer %}
-            <p>You are Correct</p>
-            <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
-            {% csrf_token %}
-            <input type="submit" name="nextQuestion" value="Next Question" class="btn btn-blue"/>
-            <input type="submit" name="showSolution" value="Show Solution" class="btn btn-blue"/>
+{#            <input type="submit" id="solutionBtn" name="showSolution" value="Show Solution" class="btn btn-blue"/>#}
+            <div id="solutionBtn" class="btn btn-blue">Show Solution</div>
             <input type="submit" name="back" value="Back" class="btn btn-blue"/>
             </form>
 
-        {% elif attempts != 0 %}
+        {# Still answering question #}
+        {% else%}
             <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
             {% csrf_token %}
             {{ form.as_p }}
@@ -60,20 +69,16 @@
             <input type="submit" name="submitAnswer" value="Submit Answer" class="btn btn-blue"/>
             <input style="margin: 0px" type="submit" name="back" value="Back" class="btn btn-blue"/>
             </form>
-            <p>You have {{ attempts }} attempts remaining</p>
-
-        {% else %}
-            <p>You are Incorrect</p>
-            <form action="{% url 'core:practice_topics_detail' topic%}" method="post" role="form">
-            {% csrf_token %}
-            <input type="submit" name="nextQuestion" value="Next Question" class="btn btn-blue"/>
-            <input type="submit" name="showSolution" value="Show Solution" class="btn btn-blue"/>
-            <input type="submit" name="back" value="Back" class="btn btn-blue"/>
-            </form>
+            {% if attempts < 3 %}
+                <p style="font-size: 20px; margin-bottom: 5px; margin-top: 10px">You are Incorrect</p>
+            {% endif %}
+            <p style="font-size: 20px">You have {{ attempts }} attempts remaining</p>
 
         {% endif %}
 
 
    </div>
 </div>
+
+<script src="{% static 'js/practice_topics_detail.js' %}"></script>
 {% endblock %}

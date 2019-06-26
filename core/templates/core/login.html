@@ -9,10 +9,29 @@
   <script src="{% static 'js/script.js' %}"></script>
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/register.css' %}" type="text/css">
+
+  <style>
+    .header-main {
+        background-image: url("{% static 'css/mathBackground.png' %}");
+        padding: 30px;
+        text-align: center;
+    }
+
+    .header-main h1 {
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+  </style>
+
 </head>
 <body>
-<br>
-<div id="wrapper">
+
+<header class="header-main">
+      <h1>Conant Math Team</h1>
+</header>
+
+<div  id="wrapper" style="padding-top: 5%; margin-top: 0px">
   <div id="floatLeft">
   <h1 id="thin">Welcome</h1>
   <h3>Log In to Practice</h3>
@@ -21,9 +40,12 @@
 <div class="container-fluid" id="loginDiv">
 
     <div class="row">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-8">
             <div class="panel panel-default loginMain">
                 <div class="panel-body">
+                    {% if gotLoggedOut %}
+                        <p><strong>You got logged out. Please log back in.</strong></p>
+                    {% endif %}
                     {% if error_message %}
                         <p><strong>{{ error_message }}</strong></p>
                     {% endif %}
@@ -42,11 +64,12 @@
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-blue" style="margin: 0 0 10px 0; ">Submit</button>
+                                <input type="submit" name="back" value="Back" class="btn btn-blue" style="margin: 0 0 10px 15px; "></input>
                             </div>
                         </div>
                     </form>
                 </div>
-                <p style="font-size: 21px; overflow-x: visible">
+                <p style="font-size: 21px">
                     Don't have an account? <a href="{% url 'core:register' %}">Click here</a> to register.
                 </p>
             </div>

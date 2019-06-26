@@ -19,7 +19,7 @@
 
 {% for question in questions %}
     <div class="questionList">
-        <h4 class="inlineh" style="font-weight: bold; margin-top: 20px; margin-bottom: 0px"> Question {{ forloop.counter }} </h4>
+        <h4 class="inlineh" style="display: block; font-weight: bold; margin-top: 20px; margin-bottom: 0px"> Question {{ forloop.counter }} </h4>
         {% if question.questionPicture %}
             <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
         {% endif %}
@@ -32,6 +32,7 @@
             <img id="correct{{ forloop.counter }}" class="img-fluid" style="position: absolute; margin-left: 20px;" src="{% static 'css/incorrect.png' %}" width="30" height="40">
             <div id="solutionBtn{{ forloop.counter }}" class="btn btn-blue" style="display: block; width: 150px; margin: auto; margin-top: 15px; left: 0; right: 0;">View Solution</div>
             <div id = "solution{{ forloop.counter }}" style="margin: auto; display: none">
+                <hr>
                 {% if question.answerPicture %}
                     <img style="margin-top: 20px" class="img-fluid" src="{{ question.answerPicture.url }}" width="1000" height="500">
                 {% endif %}

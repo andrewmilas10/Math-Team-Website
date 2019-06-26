@@ -16,11 +16,11 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Q
 
-topics = [['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability', 'Quadratics', 'Freshman Conference'],
-          ['Geometric Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
+topics = [['Ratios, Proportions and Percents', 'Number Theory and Divisibility', 'Counting Basics and Probability', 'Number Bases', 'Quadratics', 'Freshman Conference'],
+          ['Geometric Probability', 'Functions', 'Advanced Geometrical Concepts', 'Perimeter, Area, and Surface Area',
                      'Logic, Sets, and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Sophomore Conference'],
-          ['Probability', 'Coordinate Geometry', 'Trigonometry', 'Junior Conference'],
-          ['Trigonometry', 'Parametric Equations', 'Theory of Equations', 'Senior Conference'],
+          ['Probability', 'Trigonometry', 'Polynomials', 'Logs and Exponents', 'Transformations using Matrices', 'Junior Conference'],
+          ['Trigonometry', 'Parametric Equations', 'Theory of Equations', 'Sequences and Series', 'Vectors', 'Senior Conference'],
           ["Freshman Regionals", "Freshman State"],
           ["Sophomore Regionals", "Sophomore State"],
           ["Junior Regionals", "Junior State"],
@@ -33,11 +33,15 @@ def index(request):
     return render(request, 'core/index.html', {})
 
 def post_list(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     posts = Post.objects.all().order_by('published_date')
     return render(request, 'core/post_list.html', {'posts': posts, "activeNav": "1"})
 
 def learn(request, category, title):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     global activeNav, topics;
     activeNav = "5"
     category = int(category)
@@ -64,7 +68,7 @@ def question_list(request):
     gradesSearched = []
     numberSearched = []
     if not request.user.is_authenticated:
-        return render(request, 'core/login.html')
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     else:
         question_results = Question.objects.all()
         questions = Question.objects.all()
@@ -101,6 +105,8 @@ def question_list(request):
 #answer of the users input to see if the user got it right or not. it also checks if the
 #user has completed the question or not
 def detail(request, question_id):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     question = get_object_or_404(Question, pk=question_id)
     submitbutton= request.POST.get('submit')
     submitAnswerButton = request.POST.get('submitAnswer')
@@ -139,6 +145,10 @@ class UserFormView(View):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
+        backBtn = request.POST.get("back")
+        print(backBtn)
+        if backBtn:
+            return render(request, 'core/index.html')
         form = self.form_class(request.POST)
 
         if form.is_valid():
@@ -155,7 +165,7 @@ class UserFormView(View):
                 if user.is_active:
                     login(request, user)
                     return render(request, 'core/homepage_logged_in.html', {"activeNav": "0"})
-        return render(request, 'core/registration_form.html', {'form': form, 'error_message': 'your username or email may already be registered. please choose another one'})
+        return render(request, 'core/registration_form.html', {'form': form, 'error_message': 'Your username or email may already be registered. Please choose another one'})
 
 
 #this function logs the user out of the page and returns the user back to the login page
@@ -169,6 +179,9 @@ def logout_user(request):
 
 #this function logs the user in to the website and redirects them to the homepage for logged in users
 def login_user(request):
+    backBtn = request.POST.get("back")
+    if backBtn:
+        return render(request, 'core/index.html')
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -185,6 +198,8 @@ def login_user(request):
     return render(request, 'core/login.html')
 
 def homepage(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     return render(request, 'core/homepage_logged_in.html', {"activeNav": "0"})
 
 def pickColor(progress):
@@ -199,6 +214,8 @@ def pickColor(progress):
 
 activeNav = "3";
 def practice_topics(request, category):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     global activeNav, activeNavs, topics, titles;
     category = int(category)
     activeNav = activeNavs[category]
@@ -240,6 +257,8 @@ def pickQuestion(topic, difficulties):
     return question
 
 def reset(request, topic, category):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     global activeNav;
     user = request.user
     progressDict = json.loads(user.profile.progress2)
@@ -261,11 +280,14 @@ def reset(request, topic, category):
     return practice_topics(request, category)
 
 def practice_topics_detail(request, topic):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     global activeNav;
     user = request.user
     progressDict = json.loads(user.profile.progress2)
     attemptsDict = json.loads(user.profile.attempts)
     currCorrectDict = json.loads(user.profile.currCorrect)
+    currAnswer = json.loads(user.profile.currAnswer)
 
     topicOrderDict = json.loads(user.profile.topicOrder)
     for top in topicOrderDict.keys():
@@ -285,9 +307,7 @@ def practice_topics_detail(request, topic):
 
     submitAnswerButton = request.POST.get('submitAnswer')
     nextQuestionButton = request.POST.get('nextQuestion')
-    showSolutionButton = request.POST.get('showSolution')
     backButton = request.POST.get('back')
-    print(backButton)
     correctAnswer = False
 
     def getContext():
@@ -296,15 +316,13 @@ def practice_topics_detail(request, topic):
             'attempts': attemptsDict[topic],
             'color': pickColor(progressDict[topic]),
             'topic': topic,
-            'showSolutionButton': showSolutionButton,
             'question': pastQuestion,
             'correctAnswer': correctAnswer,
-            "activeNav": activeNav
+            "activeNav": activeNav,
+            "currAnswer": currAnswer[topic],
         }
 
-    if showSolutionButton:
-        return render(request, 'core/practice_topics_detail.html', getContext())
-    elif backButton:
+    if backButton:
         category = 0
         while topic not in topics[category]:
             category += 1
@@ -312,10 +330,10 @@ def practice_topics_detail(request, topic):
     elif nextQuestionButton and (currCorrectDict[topic] == "T" or attemptsDict[topic]==0):
         attemptsDict[topic] = 3
         currCorrectDict[topic] = "F"
+        currAnswer[topic] = ""
         user.profile.attempts = json.dumps(attemptsDict)
         user.profile.currCorrect = json.dumps(currCorrectDict)
-        # pastQuestion.is_complete = True
-        # pastQuestion.save()
+        user.profile.currAnswer = json.dumps(currAnswer)
 
         if progressDict[topic] <= 50:
             difficulties = [1, 2, 3]
@@ -332,6 +350,8 @@ def practice_topics_detail(request, topic):
         return render(request, 'core/practice_topics_detail.html', getContext())
     elif submitAnswerButton:
         input = request.POST.get('answer')
+        currAnswer[topic] = input
+        user.profile.currAnswer = json.dumps(currAnswer)
         if input.replace(" ", "") in pastQuestion.answer.replace(" ", "").split("@"):
             correctAnswer = True
             progressDict[topic] += 10
@@ -356,6 +376,8 @@ def practice_topics_detail(request, topic):
 
 activeNav = "6";
 def practice_tests(request, category):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     global activeNav, activeNavs, topics, titles;
     category = int(category)
     activeNav = "6"
@@ -374,6 +396,8 @@ def practice_tests(request, category):
     return render(request, 'core/practice_tests.html', {'title': title, 'category': category, 'progress': progress, 'topics': topiclist, "activeNav": activeNav})
 
 def practice_tests_detail(request, topic):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     global activeNav;
     user = request.user
     print(request.POST.get('answers'))
@@ -393,8 +417,8 @@ def practice_tests_detail(request, topic):
     return render(request, 'core/practice_tests_detail.html', {'title': topic, 'testInfo': testInfo, "activeNav": activeNav})
 
 def questions(request, filter_by):
-    if not request.user.is_authenticated():
-        return render(request, 'core/login.html')
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     else:
         try:
             question_ids = []
@@ -410,6 +434,8 @@ def questions(request, filter_by):
         })
 
 def practice_tests_take(request, topic):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     global activeNav;
     user = request.user
 
@@ -441,6 +467,8 @@ def practice_tests_take(request, topic):
                    'currAnswers': str(currAnswers[topic])[1:-1], "distribution": str(json.loads(user.profile.testDistribution)[topic])[1:-1]})
 
 def start_timer(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     user = request.user
     testTime = json.loads(user.profile.testTime)
     testTime[request.POST.get('topic')] = request.POST.get('end')
@@ -449,10 +477,14 @@ def start_timer(request):
     return HttpResponse()
 
 def end_timer(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     text = submit_practice_test(request, request.POST.get('topic'), request.POST.get("answers").split(","))
     return HttpResponse(text)
 
 def edit_answers(request):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     user = request.user
     testAnswers = json.loads(user.profile.testAnswers)
     testAnswers[request.POST.get('topic')][int(request.POST.get('id'))-1] = request.POST.get('answer')
@@ -461,7 +493,8 @@ def edit_answers(request):
     return HttpResponse()
 
 def submit_practice_test(request, topic, answers):
-    print(topic, answers)
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
     user = request.user
     testTime = json.loads(user.profile.testTime)
     testTime[topic] = "-1"

@@ -7,8 +7,26 @@
   <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
   <script src="{% static 'js/script.js' %}"></script>
   <link rel="stylesheet" href="{% static 'css/register.css' %}" type="text/css">
+
+  <style>
+    .header-main {
+        background-image: url("{% static 'css/mathBackground.png' %}");
+        padding: 30px;
+        text-align: center;
+    }
+
+    .header-main h1 {
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+  </style>
+
 </head>
 <body>
+<header class="header-main">
+      <h1>Conant Math Team</h1>
+</header>
 <div id="wrapper">
   <div id="floatLeft">
   <h1 id="thin">Register</h1>
@@ -26,18 +44,21 @@
                   <form class="form-horizontal" method="post" enctype="multipart/form-data">
                       {% csrf_token %}
                       {% include 'core/form_template.html' %}
-                      <br>
                       <div class="form-group center">
                           <div class="col-sm-offset-2 col-sm-10">
                               <button type="submit" class="btn btn-blue" style="margin: 0">Submit</button>
+                              <a class="btn btn-blue" style="margin: 0 0 0 15px; " href="{% url 'core:index' %}">Back</a>
                           </div>
                       </div>
                   </form>
               </div>
           </div>
       </div>
+    </div>
   </div>
-</div>
+<p style="font-size: 21px">
+    Already have an account? <a href="{% url 'core:login_user' %}">Click here</a> to log in.
+</p>
 </div>
 <footer id="footer" style="position: absolute; height: 45px; right: 0; bottom: 0; left: 0; padding: 12px; background-color: #efefef; text-align: center;" >©2019 Created by Nisha Pant and Andrew Milas</footer>
 </body>

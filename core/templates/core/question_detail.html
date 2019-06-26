@@ -4,7 +4,12 @@
 <div class="questions-container">
     <h1 id="title">Practice Problems</h1>
     <div class="questionList">
-        <img class="img-fluid" src="{{ question.questionPicture.url }}" width="1000" height="500">
+        {% if question.questionPicture %}
+            <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
+        {% endif %}
+        {% if question.questionText %}
+           <p class="left" style="color: black; font-size: 20px; ">{{ question.questionText|linebreaksbr }}</p>
+        {% endif %}
         <p class="left">Topic: {{ question.topic }}</p>
         <p class="left">Difficulty: {{ question.difficulty }}</p>
         <p class="left">Year: {{ question.year }}</p>
@@ -33,8 +38,13 @@
       {% endif %}
 
       {% if question.is_complete %}
-          <br>
-          <img class="img-fluid"src="{{ question.answerPicture.url }}" width="1000" height="500" id="answer">
+          <hr>
+          {% if question.answerPicture %}
+            <img class="img-fluid" src="{{ question.answerPicture.url }}" width="1000" height="500">
+        {% endif %}
+        {% if question.answerText %}
+           <p class="left" style="font-size: 20px">{{ question.answerText|linebreaksbr }}</p>
+        {% endif %}
       {% endif %}
 
    </div>

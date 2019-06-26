@@ -11,20 +11,28 @@ class Profile(models.Model):
         'Ratios, Proportions and Percents',
         'Number Theory and Divisibility',
         'Counting Basics and Probability',
+        'Number Bases',
         'Quadratics',
         'Freshman Conference',
         'Probability',
+        'Functions',
         'Advanced Geometrical Concepts',
         'Perimeter, Area and Surface Area',
         'Logic, Sets and Venn Diagram',
+        'Geometric Probability',
         'Similarity',
         'Coordinate Geometry',
         'Circles',
         'Sophomore Conference',
         'Trigonometry',
+        'Polynomials',
+        'Logs and Exponents',
+        'Transformations using Matrices',
         'Junior Conference',
         'Parametric Equations',
         'Theory of Equations',
+        'Sequences and Series',
+        'Vectors',
         'Senior Conference',
         'Freshman Regionals',
         'Freshman State',
@@ -57,6 +65,7 @@ class Profile(models.Model):
     topicDict4 = "{"
     topicDict4 = "{"
     topicDict5 = "{"
+    topicDict6 = "{"
     i = 0
     for topic in TOPIC_LIST:
         topicDict+= "\"" + topic+"\": 0,"
@@ -64,6 +73,7 @@ class Profile(models.Model):
         topicDict3 += "\"" + topic + "\": \"N\","
         topicDict4 += "\"" + topic + "\": \"F\","
         topicDict5 += "\"" + topic + "\": " + str(i) + ","
+        topicDict6 += "\"" + topic + "\": \"\","
         i+=1
 
     topicDict = topicDict[:-1]+"}"
@@ -71,11 +81,14 @@ class Profile(models.Model):
     topicDict3 = topicDict3[:-1] + "}"
     topicDict4 = topicDict4[:-1] + "}"
     topicDict5 = topicDict5[:-1] + "}"
+    topicDict6 = topicDict6[:-1] + "}"
+
     progress2 = models.CharField(max_length=1000, default=topicDict)
     attempts = models.CharField(max_length=1000, default=topicDict2)
     currQuestions = models.CharField(max_length=1000, default=topicDict3)
     currCorrect = models.CharField(max_length=1000, default=topicDict4)
     topicOrder = models.CharField(max_length=1000, default=topicDict5)
+    currAnswer = models.CharField(max_length=1000, default=topicDict6)
 
     TEST_LIST = (
         '2016 Advanced Geometrical Concepts',
@@ -109,14 +122,6 @@ class Profile(models.Model):
     testAnswers = models.CharField(max_length=999, default=testDict2)
     testDistribution = models.CharField(max_length=999, default=testDict3)
 
-
-    # attempts = models.CharField(max_length=1000, default=topicDict2)
-    # currQuestions = models.CharField(max_length=1000, default=topicDict3)
-    # currCorrect = models.CharField(max_length=1000, default=topicDict4)
-    # topicOrder = models.CharField(max_length=1000, default=topicDict5)
-
-
-
     def __str__(self):
         return self.user.username + " Profile"
 
@@ -147,21 +152,30 @@ class Topic(models.Model):
         ('Junior', 'Junior'),
         ('Senior', 'Senior'),
     )
+
     TOPIC_LIST = (
         ('Ratios, Proportions and Percents', 'Ratios, Proportions and Percents'),
         ('Number Theory and Divisibility', 'Number Theory and Divisibility'),
         ('Counting Basics and Probability', 'Counting Basics and Probability'),
+        ('Number Bases', 'Number Bases'),
         ('Quadratics', 'Quadratics'),
         ('Probability', 'Probability'),
+        ('Functions', 'Functions'),
         ('Advanced Geometrical Concepts', 'Advanced Geometrical Concepts'),
         ('Perimeter, Area and Surface Area', 'Perimeter, Area and Surface Area'),
         ('Logic, Sets and Venn Diagram', 'Logic, Sets and Venn Diagram'),
+        ('Geometric Probability', 'Geometric Probability'),
         ('Similarity', 'Similarity'),
         ('Coordinate Geometry', 'Coordinate Geometry'),
         ('Circles', 'Circles'),
         ('Trigonometry', 'Trigonometry'),
+        ('Polynomials', 'Polynomials'),
+        ('Logs and Exponents', 'Logs and Exponents'),
+        ('Transformations using Matrices', 'Transformations using Matrices'),
         ('Parametric Equations', 'Parametric Equations'),
         ('Theory of Equations', 'Theory of Equations'),
+        ('Sequences and Series', 'Sequences and Series'),
+        ('Vectors', 'Vectors'),
         ('Freshman Regionals', 'Freshman Regionals'),
         ('Freshman State', 'Freshman State'),
         ('Sophomore Regionals', 'Sophomore Regionals'),
@@ -205,25 +219,33 @@ class Question(models.Model):
         ('Ratios, Proportions and Percents', 'Ratios, Proportions and Percents'),
         ('Number Theory and Divisibility', 'Number Theory and Divisibility'),
         ('Counting Basics and Probability', 'Counting Basics and Probability'),
+        ('Number Bases', 'Number Bases'),
         ('Quadratics', 'Quadratics'),
         ('Probability', 'Probability'),
+        ('Functions', 'Functions'),
         ('Advanced Geometrical Concepts', 'Advanced Geometrical Concepts'),
         ('Perimeter, Area and Surface Area', 'Perimeter, Area and Surface Area'),
         ('Logic, Sets and Venn Diagram', 'Logic, Sets and Venn Diagram'),
+        ('Geometric Probability', 'Geometric Probability'),
         ('Similarity', 'Similarity'),
         ('Coordinate Geometry', 'Coordinate Geometry'),
         ('Circles', 'Circles'),
         ('Trigonometry', 'Trigonometry'),
+        ('Polynomials', 'Polynomials'),
+        ('Logs and Exponents', 'Logs and Exponents'),
+        ('Transformations using Matrices', 'Transformations using Matrices'),
         ('Parametric Equations', 'Parametric Equations'),
         ('Theory of Equations', 'Theory of Equations'),
+        ('Sequences and Series', 'Sequences and Series'),
+        ('Vectors', 'Vectors'),
         ('Freshman Regionals', 'Freshman Regionals'),
-        ('Freshman State','Freshman State'),
-        ('Sophomore Regionals','Sophomore Regionals'),
-        ('Sophomore State','Sophomore State'),
-        ('Junior Regionals','Junior Regionals'),
-        ('Junior State','Junior State'),
-        ('Senior Regionals','Senior Regionals'),
-        ('Senior State','Senior State')
+        ('Freshman State', 'Freshman State'),
+        ('Sophomore Regionals', 'Sophomore Regionals'),
+        ('Sophomore State', 'Sophomore State'),
+        ('Junior Regionals', 'Junior Regionals'),
+        ('Junior State', 'Junior State'),
+        ('Senior Regionals', 'Senior Regionals'),
+        ('Senior State', 'Senior State')
     )
     QUESTION_NUMBERS = (
         ('1','1'),

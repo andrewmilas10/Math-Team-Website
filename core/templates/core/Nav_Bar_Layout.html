@@ -36,16 +36,32 @@
           padding-bottom: 6rem;
           min-height: 100%;
         }
+
+        .header-main {
+            background-image: url("{% static 'css/mathBackground.png' %}");
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header-main h1 {
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
     </style>
+
 </head>
 <body>
-
+  <header class="header-main">
+      <h1>Conant Math Team</h1>
+  </header>
   <nav class="navbar navbar-expand navbar-light bg-light">
 
-    <div  class="navbar-nav">
+    <div class="navbar-nav">
 
           <div style="text-align: center">
-              <span class="navbar-brand">Conant Math Team</span>
+{#              <span class="navbar-brand">Conant Math Team</span>#}
               <img src="{% static 'css/chs.png' %}" style="margin-right: 10px" alt = "conant logo" width="40px" height="40px">
           </div>
 
@@ -103,7 +119,7 @@
           </div>
 
           <a {% ifequal activeNav "4" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:logout_user' %}">Logout</a>
-          <div style="float: right; text-align: right; margin-top: 7px;padding-left: 40px; padding-right: 10px" class="nav navbar-nav navbar-right">
+          <div style="margin-left: auto; text-align: right; margin-top: 7px;padding-left: 40px; padding-right: 10px" class="nav navbar-nav">
             <h3 id="welcome">Welcome {{ user.username }}</h3>
           </div>
 
