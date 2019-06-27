@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^reset/(?P<topic>[a-zA-Z0-9, -]+)/(?P<category>[0-9]+)/$', views.reset, name='reset'),
     url(r'^start_timer$', views.start_timer, name='start_timer'),
     url(r'^end_timer$', views.end_timer, name='end_timer'),
-    url(r'^edit_answers$', views.edit_answers, name='edit_answers')
+    url(r'^edit_answers$', views.edit_answers, name='edit_answers'),
+    url(r'^update_profiles$', views.update_profiles, name='update_profiles')
 ]

@@ -24,7 +24,7 @@
             <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
         {% endif %}
         {% if question.questionText %}
-           <p style="font-size: 20px">{{ question.questionText|linebreaksbr }}</p>
+           <p class="left" style="font-size: 20px">{{ question.questionText|linebreaksbr }}</p>
         {% endif %}
         <p class="left">Answer: {{ question.answer }}</p>
         <input type="input" id="answer{{ forloop.counter }}" name="answer{{ forloop.counter }}" placeholder="Type Answer Here">
@@ -37,7 +37,7 @@
                     <img style="margin-top: 20px" class="img-fluid" src="{{ question.answerPicture.url }}" width="1000" height="500">
                 {% endif %}
                 {% if question.answerText %}
-                   <p style="font-size: 20px">{{ question.answerText|linebreaksbr }}</p>
+                   <p class="left" style="font-size: 20px">{{ question.answerText|linebreaksbr }}</p>
                 {% endif %}
             </div>
         {% endif %}

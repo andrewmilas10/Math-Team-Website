@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View
 from .forms import UserForm
+from django.contrib.auth.models import User
 import json
 import operator
 import random
@@ -58,7 +59,7 @@ def learn(request, category, title):
 #this is the function that is loaded when the list of questions is called, it also works on the search functionality of the
 #website by finding the questions under the filter with a serach query
 def question_list(request):
-    topiclist = ['Ratios, Proportions and Percents','Number Theory and Divisibility','Counting Basics and Probability'
+    topiclist = ['Ratios, Proportions and Percents','Number Theory and Divisibility', "Number Bases", 'Counting Basics and Probability'
     , 'Quadratics', 'Probability', 'Advanced Geometrical Concepts', 'Perimeter, Area and Surface Area',
     'Logic, Sets and Venn Diagram', 'Similarity', 'Coordinate Geometry', 'Circles', 'Trigonometry',
     'Parametric Equations', 'Theory of Equations']
@@ -522,3 +523,40 @@ def submit_practice_test(request, topic, answers):
         return "You scored "+str(numCorrect)+"/5 correct"
 
     return practice_tests_detail(request, topic[5:])
+
+def update_profiles(request):
+    user = User.objects.create_user('toDelete', 'andrewmilas10@gmail.com', 'letitbe1')
+    otherProfiles = Profile.objects.all()
+    profile = Profile.objects.create(user=user)
+
+    def newD(old, newKey, newValue):
+        old[newKey] = newValue
+        return old
+
+    for prof in otherProfiles:
+        progress2 = json.loads(profile.progress2)
+        for topic in progress2.keys():
+            # print(topic)
+            if topic not in json.loads(prof.progress2).keys():
+                prof.progress2 = json.dumps(newD(json.loads(prof.progress2), topic, json.loads(profile.progress2)[topic]))
+                prof.currQuestions = json.dumps(newD(json.loads(prof.currQuestions), topic, json.loads(profile.currQuestions)[topic]))
+                prof.attempts = json.dumps(newD(json.loads(prof.attempts), topic, json.loads(profile.attempts)[topic]))
+                prof.currCorrect = json.dumps(newD(json.loads(prof.currCorrect), topic, json.loads(profile.currCorrect)[topic]))
+                prof.topicOrder = json.dumps(newD(json.loads(prof.topicOrder), topic, json.loads(profile.topicOrder)[topic]))
+                prof.currAnswer = json.dumps(newD(json.loads(prof.currAnswer), topic, json.loads(profile.currAnswer)[topic]))
+                prof.save()
+        testProgress = json.loads(profile.testProgress)
+        for topic in testProgress.keys():
+            print(topic)
+            if topic not in json.loads(prof.testProgress).keys():
+                prof.testProgress = json.dumps(newD(json.loads(prof.testProgress), topic, json.loads(profile.testProgress)[topic]))
+                prof.testTime = json.dumps(newD(json.loads(prof.testTime), topic, json.loads(profile.testTime)[topic]))
+                prof.testAnswers = json.dumps(newD(json.loads(prof.testAnswers), topic, json.loads(profile.testAnswers)[topic]))
+                prof.testDistribution = json.dumps(newD(json.loads(prof.testDistribution), topic, json.loads(profile.testDistribution)[topic]))
+                prof.save()
+
+    # user = authenticate(username=username, password=password)
+    profile.delete()
+    user.delete()
+    print("hi")
+    return HttpResponse()

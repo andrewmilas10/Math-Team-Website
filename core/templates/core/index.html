@@ -8,6 +8,17 @@
   <script src="{% static 'js/script.js' %}"></script>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/homepage.css' %}" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    {% csrf_token %}
+    <script>
+    function update_profiles() {
+        $.ajax({
+            type: "POST",
+            url: "/update_profiles",
+            data: {csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val() },   /* Passing the text data */
+        });
+    }
+    </script>
 </head>
 
 <style>
@@ -31,6 +42,9 @@
   <div id="contact">
     <a href="mailto:rcortez@d211.org"><button class="btn btn-blue coach">Contact a coach</button></a>
   </div>
+  <div>
+    <button onclick="update_profiles()" class="btn btn-blue coach">Update Profiles</button></a>
+  </div>
   <div id="banner" class="align-middle align-baseline" style="padding-top: 8%">
     <div class="child">
         <h1>Start Practice Today</h1>
@@ -41,4 +55,5 @@
   </div>
 <footer id="footer" style="position: absolute; height: 45px; right: 0; bottom: 0; left: 0; padding: 12px; background-color: #efefef; text-align: center;" >©2019 Created by Nisha Pant and Andrew Milas</footer>
 </body>
+
 </html>
