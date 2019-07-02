@@ -410,6 +410,8 @@ def practice_tests_detail(request, topic):
         if (num[0][5:] == topic):
             if num[0][:4] != "RAND" and Question.objects.filter(topic__in=[topic]).filter(year = num[0][:4])[0].calc_allowed:
                 calcAllowed = "Calculator Allowed"
+            elif num[0][:4] == "RAND":
+                calcAllowed = "TODO, don't know yet"
             else:
                 calcAllowed = "No Calculator"
             print(str(testTime[num[0]]))
@@ -452,12 +454,19 @@ def practice_tests_take(request, topic):
 
     testTime = json.loads(user.profile.testTime)
     currAnswers = json.loads(user.profile.testAnswers)
+    currQuestions = json.loads(user.profile.testQuestion)
     if not request.POST.get('viewSolutions') and int(testTime[topic]) <= 0:
         currAnswers[topic] = ['', '', '', '', '']
         user.profile.testAnswers = json.dumps(currAnswers)
+        if topic[:4] == "RAND":
+            for i in range(1, 6):
+                currQuestions[topic][i-1] = random.choice(Question.objects.filter(topic__in=[topic[5:]]).filter(difficulty=i)).id
+        else:
+            currQuestions[topic] = list(map(lambda x: x.id, sorted(Question.objects.filter(topic__in=[topic[5:]]).filter(year=topic[:4]), key=lambda t: t.difficulty)))
+        user.profile.testQuestion = json.dumps(currQuestions)
         user.profile.save()
-    print(currAnswers)
-    questions = sorted(Question.objects.filter(topic__in=[topic[5:]]).filter(year = topic[:4]), key=lambda t: t.difficulty)
+
+    questions = [get_object_or_404(Question, pk=currQuestions[topic][i]) for i in range(5)]
 
     if request.POST.get('viewSolutions'):
         return render(request, 'core/practice_tests_take.html',
@@ -501,7 +510,9 @@ def submit_practice_test(request, topic, answers):
     testTime[topic] = "-1"
     user.profile.testTime = json.dumps(testTime)
 
-    questions = sorted(Question.objects.filter(topic__in=[topic[5:]]).filter(year=topic[:4]),key=lambda t: t.difficulty)
+    currQuestions = json.loads(user.profile.testQuestion)
+    questions = [get_object_or_404(Question, pk=currQuestions[topic][i]) for i in range(5)]
+
     numCorrect = 0
     distribution = []
     for i in range(len(questions)):
@@ -551,6 +562,7 @@ def update_profiles(request):
             if topic not in json.loads(prof.testProgress).keys():
                 prof.testProgress = json.dumps(newD(json.loads(prof.testProgress), topic, json.loads(profile.testProgress)[topic]))
                 prof.testTime = json.dumps(newD(json.loads(prof.testTime), topic, json.loads(profile.testTime)[topic]))
+                prof.testQuestion = json.dumps(newD(json.loads(prof.testQuestion), topic, json.loads(profile.testQuestion)[topic]))
                 prof.testAnswers = json.dumps(newD(json.loads(prof.testAnswers), topic, json.loads(profile.testAnswers)[topic]))
                 prof.testDistribution = json.dumps(newD(json.loads(prof.testDistribution), topic, json.loads(profile.testDistribution)[topic]))
                 prof.save()

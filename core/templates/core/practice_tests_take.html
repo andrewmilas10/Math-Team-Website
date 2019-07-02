@@ -10,16 +10,19 @@
 {% csrf_token %}
 {{ form.as_p }}
 
-<div class="questionList" id="endTime" style="visibility: hidden; position: fixed; top: 123px; margin: auto; left: 0; right: 0;
+<div class="questionList" id="endTime" style="visibility: hidden; position: fixed; top: 123px; margin: auto; left: 0; right: 0; z-index: 1;
     border-style: solid; border-width: 5px; background: #5ab6db; width: 50%" >
-    <p style="font-size: 23px">Time Ran Out</p>
+    <p style="font-weight: bold; font-size: 23px">Time Ran Out</p>
     <p id="score" style="font-size: 20px">You scored 0/5 correct</p>
     <input style="display: block; margin: auto; left: 0; right: 0;" type="submit" name="back" value="Back" class="btn btn-blue"/>
 </div>
 
 {% for question in questions %}
-    <div class="questionList">
-        <h4 class="inlineh" style="display: block; font-weight: bold; margin-top: 20px; margin-bottom: 0px"> Question {{ forloop.counter }} </h4>
+    <div class="questionList" style="position: relative">
+    {#        {% if question.calc_allowed %}#}
+            <img src="{% static 'css/calculator.png' %}" style="position: absolute; right: -10px; top: 5px" alt = "calculator allowed" width="70px" >
+{#        {% endif %}#}
+        <h4 class="inlineh" style="display: block; font-weight: bold; margin-top: 20px; margin-bottom: 15px"> Question {{ forloop.counter }} </h4>
         {% if question.questionPicture %}
             <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
         {% endif %}

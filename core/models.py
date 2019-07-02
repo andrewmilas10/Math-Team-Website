@@ -96,7 +96,8 @@ class Profile(models.Model):
         'RAND Ratios, Proportions and Percents',
         '2012 Number Bases',
         '2010 Number Bases',
-        '2008 Number Bases'
+        '2008 Number Bases',
+        'RAND Number Bases'
     )
     testDict = "{"
     testDict2 = "{"
@@ -122,6 +123,7 @@ class Profile(models.Model):
     # topicDict5 = topicDict5[:-1] + "}"
     testProgress = models.CharField(max_length=9999, default=testDict)
     testTime = models.CharField(max_length=99999999999, default=testDict)
+    testQuestion = models.CharField(max_length=99999, default=testDict2)
     testAnswers = models.CharField(max_length=999, default=testDict2)
     testDistribution = models.CharField(max_length=999, default=testDict3)
 

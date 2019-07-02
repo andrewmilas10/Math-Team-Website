@@ -13,8 +13,11 @@
 
   <div class="questionList" style="text-align: left; padding-top: 0; ">
     <br>
-      <p class="test-detail-p" style="font-size: 22px;padding-top: 6px">{{ key }}</p>
-
+      {% if key|slice:"0:4" == "RAND" %}
+        <p class="test-detail-p" style="font-size: 22px;padding-top: 6px">Random {{ key|slice:"5:" }}</p>
+      {% else %}
+        <p class="test-detail-p" style="font-size: 22px;padding-top: 6px">{{ key }}</p>
+      {% endif %}
       {# Taking test for the first time #}
       {% if time == "0" %}
         <input style="float: right;margin: auto; margin-right: 17px; font-size: 18px" type="submit" name="takeTest" value="Take Test" class="btn btn-blue"/>

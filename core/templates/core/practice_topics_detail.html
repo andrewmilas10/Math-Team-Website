@@ -14,7 +14,10 @@
         </div>
 
     </div>
-    <div class="questionList">
+    <div class="questionList" style="position: relative">
+    {#        {% if question.calc_allowed %}#}
+            <img src="{% static 'css/calculator.png' %}" style="position: absolute; right: -10px; bottom: 5px" alt = "calculator allowed" width="70px" >
+{#        {% endif %}#}
         {% if question.questionPicture %}
             <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
         {% endif %}
