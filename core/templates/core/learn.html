@@ -6,8 +6,9 @@
 <h1 class = "banner" id="title">{{ title }}</h1>
 <br>
 
-<div style="text-align: left; padding: 20px; position: relative" class="questionList">
-    {% for post in topicDescriptions %}
+{% for post in topicDescriptions %}
+    <div style="text-align: left; padding: 20px; position: relative" class="questionList">
+
         <div class="onePost">
           <h4 style="font-weight: bold">{{ post.0}}</h4>
           <img id="toggle{{ forloop.counter }}" class="img-fluid" style="float: right;margin: auto; margin-right: 20px;" src="{% static 'css/plus.png' %}" alt="Content Toggle" width="40" height="40">
@@ -17,7 +18,7 @@
             <br><br>
 
             {% if post.1 %}
-               <p>{{ post.1|linebreaksbr }}</p>
+               <p style="margin-bottom: 0">{{ post.1|linebreaksbr }}</p>
             {% endif %}
 
             {% if post.2 %}
@@ -25,7 +26,7 @@
             {% endif %}
 
             {% if post.3 %}
-               <p>{{ post.3|linebreaksbr }}</p>
+               <p style="margin-bottom: 0">{{ post.3|linebreaksbr }}</p>
             {% endif %}
 
             {% if post.4 %}
@@ -33,7 +34,7 @@
             {% endif %}
 
             {% if post.5 %}
-               <p>{{ post.5|linebreaksbr }}</p>
+               <p style="margin-bottom: 0">{{ post.5|linebreaksbr }}</p>
             {% endif %}
 
             {% if post.6 %}
@@ -41,13 +42,14 @@
             {% endif %}
 
             {% if post.7 %}
-               <p>{{ post.7|linebreaksbr }}</p>
+               <p style="margin-bottom: 0">{{ post.7|linebreaksbr }}</p>
             {% endif %}
           </div>
 
         </div>
-    {% endfor %}
-</div>
+    </div>
+{% endfor %}
+
 
 <script>
 

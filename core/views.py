@@ -405,6 +405,11 @@ def practice_tests_detail(request, topic):
     testProgress = json.loads(user.profile.testProgress)
     testTime = json.loads(user.profile.testTime)
     testInfo = []
+    for i in range(0, 5):
+        if topic in topics[i]:
+            category = i
+            break
+
     for num in testProgress.items():
         print(num[0], num[0][5:], topic)
         if (num[0][5:] == topic):
@@ -417,7 +422,7 @@ def practice_tests_detail(request, topic):
             print(str(testTime[num[0]]))
             testInfo.append([num[0], str(num[1])+"/5", calcAllowed, str(testTime[num[0]])])
 
-    return render(request, 'core/practice_tests_detail.html', {'title': topic, 'testInfo': testInfo, "activeNav": activeNav})
+    return render(request, 'core/practice_tests_detail.html', {'title': topic, 'testInfo': testInfo, "activeNav": activeNav, "category": category})
 
 def questions(request, filter_by):
     if not request.user.is_authenticated:
