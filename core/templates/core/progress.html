@@ -1,0 +1,167 @@
+{% extends 'core/Nav_Bar_Layout.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<h1 class = "banner" id="title">{{ title }}</h1>
+<br>
+
+{% for post in topicDescriptions %}
+    <div style="text-align: left; padding: 20px; position: relative" id="container{{ forloop.counter }}" class="questionList">
+
+        <div class="onePost">
+          <h4 style="font-weight: bold">{{ post.0}}</h4>
+          <img id="toggle{{ forloop.counter }}" class="img-fluid" style="float: right;margin: auto; margin-right: 20px;" src="{% static 'css/plus.png' %}" alt="Content Toggle" width="40" height="40">
+{#          <button class="btn btn-blue" style="float: right;margin: auto; margin-right: 20px; font-size: 20px">Take Test</button>#}
+
+          <div id="content{{ forloop.counter }}" style="display: block">
+            <br><br>
+            {% if post.1 %}
+               <div id="chartContainer{{ forloop.counter }}" style="margin-left: 10%; width: 100%; "></div>
+            {% endif %}
+
+          </div>
+
+        </div>
+    </div>
+{% endfor %}
+
+
+<script>
+    var topicDescriptions = {% autoescape off %} "{{ topicDescriptions }}" {% endautoescape %};
+    topicDescriptions = JSON.parse(topicDescriptions.replace(/'/g, "\""));
+
+
+    var counter = 1;
+    while (document.getElementById("toggle"+counter)) {
+        $("#toggle"+counter).click(function(){
+            console.log(this.src.includes("plus.png"));
+          var id = this.id.substring(6);
+          if (this.src.includes("plus.png")) {
+              this.src = this.src.replace("plus.png", "minus.png");
+              document.getElementById("content"+id).style.display = "block";
+          } else {
+              this.src = this.src.replace("minus.png", "plus.png");
+              document.getElementById("content"+id).style.display = "none";
+          }
+
+        });
+        counter++;
+    }
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawCharts);
+
+
+    function drawCharts() {
+          var counter = 1;
+          while (document.getElementById("toggle"+counter)) {
+
+              var progressData = [];
+      {#topicDescriptions[counter-1][1].forEach((el) => {#}
+      {#  data.push({y: el});#}
+             for (var i=0; i<topicDescriptions[counter-1][1].length; i++) {
+                progressData.push([""+i, topicDescriptions[counter-1][1][i]])
+             }
+
+              var data = new google.visualization.DataTable();
+              data.addColumn('string', 'Questions Solved');
+              data.addColumn('number', 'Progress');
+
+              data.addRows(progressData);
+
+              var options = {
+                  legend: {position: 'none'},
+                width: document.getElementById("container"+counter).offsetWidth*3/4,
+                height: document.getElementById("container"+counter).offsetWidth*1/4,
+                chartArea: {  width: "80%", height: "70%", bottom: "25%", left: "15%"},
+                hAxis: {
+                  title: 'Questions Solved',
+                    textStyle: {
+                     fontSize: 18,
+                     bold: true
+                  },
+                  titleTextStyle: {
+                     fontSize: 18,
+                     bold: true
+                  }
+                },
+                vAxis: {
+                  title: 'Progress',
+                  textStyle: {
+                     fontSize: 18,
+                     bold: true
+                  },
+                  titleTextStyle: {
+                     fontSize: 18,
+                     bold: true
+                  },
+                  ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                  labels: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+                },
+                series: {
+                  1: {curveType: 'function'}
+                }
+              };
+
+              var chart = new google.visualization.LineChart(document.getElementById('chartContainer'+counter));
+
+              chart.draw(data, options);
+              document.getElementById("content"+counter).style.display = "none";
+              counter++;
+          }
+
+      }
+
+        {#var data = [];#}
+        {#topicDescriptions[counter-1][1].forEach((el) => {#}
+        {#    data.push({y: el});#}
+        {##}
+        {#var chart = new CanvasJS.Chart("chartContainer"+counter, {#}
+        {#    animationEnabled: true,#}
+        {#    theme: "light2",#}
+        {#    title: {#}
+        {#        text: "NSML Progress"#}
+        {#    },#}
+        {#    axisY: {#}
+        {#        includeZero: false,#}
+        {##}
+        {#    },#}
+        {#    options: {#}
+        {#        scales: {#}
+        {#            yAxes: [{#}
+        {#                ticks: {#}
+        {#                    min: 20,#}
+        {#                    max: 100#}
+        {#                }#}
+        {#            }]#}
+        {#        }#}
+        {#    },#}
+        {#    data: [{#}
+        {#        type: "line",#}
+                {#dataPoints: [#}
+                {#    {y: 450},#}
+                {#    {y: 414},#}
+                {#    {y: 520, indexLabel: "highest", markerColor: "red", markerType: "triangle"},#}
+                {#    {y: 460},#}
+                {#    {y: 450},#}
+                {#    {y: 500},#}
+                {#    {y: 480},#}
+                {#    {y: 480},#}
+                {#    {y: 410, indexLabel: "lowest", markerColor: "DarkSlateGrey", markerType: "cross"},#}
+                {#    {y: 500},#}
+                {#    {y: 480},#}
+                {#    {y: 510}#}
+                {#]#}
+        {#        dataPoints: data#}
+        {#    }]#}
+        {#chart.render();#}
+
+    {#    counter++;#}
+
+
+
+
+</script>
+
+{% endblock %}

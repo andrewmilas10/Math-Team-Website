@@ -28,5 +28,6 @@ urlpatterns = [
     url(r'^start_timer$', views.start_timer, name='start_timer'),
     url(r'^end_timer$', views.end_timer, name='end_timer'),
     url(r'^edit_answers$', views.edit_answers, name='edit_answers'),
-    url(r'^update_profiles$', views.update_profiles, name='update_profiles')
+    url(r'^update_profiles$', views.update_profiles, name='update_profiles'),
+    url(r'^progress/(?P<category>[0-9]+)/(?P<title>[a-zA-Z, -]+)/$', views.progress, name='progress')
 ]

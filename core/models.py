@@ -66,6 +66,7 @@ class Profile(models.Model):
     topicDict4 = "{"
     topicDict5 = "{"
     topicDict6 = "{"
+    topicDict7 = "{"
     i = 0
     for topic in TOPIC_LIST:
         topicDict+= "\"" + topic+"\": 0,"
@@ -74,6 +75,7 @@ class Profile(models.Model):
         topicDict4 += "\"" + topic + "\": \"F\","
         topicDict5 += "\"" + topic + "\": " + str(i) + ","
         topicDict6 += "\"" + topic + "\": \"\","
+        topicDict7 += "\"" + topic + "\": [0],"
         i+=1
 
     topicDict = topicDict[:-1]+"}"
@@ -82,6 +84,7 @@ class Profile(models.Model):
     topicDict4 = topicDict4[:-1] + "}"
     topicDict5 = topicDict5[:-1] + "}"
     topicDict6 = topicDict6[:-1] + "}"
+    topicDict7 = topicDict7[:-1] + "}"
 
     progress2 = models.CharField(max_length=1000, default=topicDict)
     attempts = models.CharField(max_length=1000, default=topicDict2)
@@ -89,6 +92,7 @@ class Profile(models.Model):
     currCorrect = models.CharField(max_length=1000, default=topicDict4)
     topicOrder = models.CharField(max_length=1000, default=topicDict5)
     currAnswer = models.CharField(max_length=1000, default=topicDict6)
+    progress = models.CharField(max_length=999999, default=topicDict7)
 
     TEST_LIST = (
         '2016 Advanced Geometrical Concepts',

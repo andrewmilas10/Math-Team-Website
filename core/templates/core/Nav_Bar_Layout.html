@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="{% static 'css/question.css' %}">
     <link rel="stylesheet" href="{% static 'css/practice.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <style>
@@ -117,6 +119,19 @@
                 <a href="{% url 'core:practice_tests' 3%}">Senior</a>
               </div>
           </div>
+
+          <div class="dropdown">
+              <a  {% ifequal activeNav "7" %}class="nav-link active dropdown-toggle" {% else %} class = "nav-link dropdown-toggle" {% endifequal %}
+                  style="cursor:pointer" id="navbardrop" data-toggle="dropdown">
+                Progress
+              </a>
+              <div class="dropdown-content dropdown-menu">
+                <a class="dropdown-item" href="{% url 'core:progress' 0 'Freshman Topics'%}">Freshman</a>
+                <a class="dropdown-item" href="{% url 'core:progress' 1 'Sophomore Topics'%}">Sophomore</a>
+                <a class="dropdown-item" href="{% url 'core:progress' 2 'Junior Topics'%}">Junior</a>
+                <a class="dropdown-item" href="{% url 'core:progress' 3 'Senior Topics'%}">Senior</a>
+              </div>
+            </div>
 
           <a {% ifequal activeNav "4" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:logout_user' %}">Logout</a>
           <div style="margin-left: auto; text-align: right; margin-top: 7px;padding-left: 40px; padding-right: 10px" class="nav navbar-nav">

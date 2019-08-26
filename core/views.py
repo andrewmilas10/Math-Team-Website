@@ -56,6 +56,34 @@ def learn(request, category, title):
 
     return render(request, 'core/learn.html', {'topicDescriptions': topicDesriptions, "title": title, "activeNav": "5"})
 
+def progress(request, category, title):
+    if not request.user.is_authenticated:
+        return render(request, 'core/login.html', {"gotLoggedOut": True})
+    global activeNav, topics;
+    activeNav = "7"
+    category = int(category)
+    topiclist = topics[category]
+
+    user = request.user
+    progressListDict = json.loads(user.profile.progress)
+    topicDesriptions = []
+    for topic in topiclist:
+        possQuestions = Question.objects.filter(topic__in=[topic])
+        if possQuestions.exists() or (topic in ['Freshman Conference', 'Sophomore Conference', 'Junior Conference','Senior Conference']):
+            topicDesriptions.append([topic, progressListDict[topic]])
+    return render(request, 'core/progress.html', {'topicDescriptions': topicDesriptions, "title": title, "activeNav": "7"})
+
+
+    # topiclist = topics[category]
+    # allTopics = Topic.objects.all()
+    # topicDesriptions = []
+    # for top in allTopics:
+    #     if (top.topic in topiclist):
+    #         topicDesriptions.append([top.topic, top.description, top.firstFile, top.secondDescription, top.secondFile,
+    #                                  top.thirdDescription, top.thirdFile, top.fourthDescription])
+    #
+    # return render(request, 'core/progress.html', {'topicDescriptions': topicDesriptions, "title": title, "activeNav": "7"})
+
 #this is the function that is loaded when the list of questions is called, it also works on the search functionality of the
 #website by finding the questions under the filter with a serach query
 def question_list(request):
@@ -263,16 +291,19 @@ def reset(request, topic, category):
     global activeNav;
     user = request.user
     progressDict = json.loads(user.profile.progress2)
+    progressListDict = json.loads(user.profile.progress)
     attemptsDict = json.loads(user.profile.attempts)
     currCorrectDict = json.loads(user.profile.currCorrect)
     questionsIDsDict = json.loads(user.profile.currQuestions)
 
     progressDict[topic] = 0
+    progressListDict[topic].append(0);
     attemptsDict[topic] = 3
     currCorrectDict[topic] = "F"
     questionsIDsDict[topic] = "N"
 
     user.profile.progress2 = json.dumps(progressDict)
+    user.profile.progress = json.dumps(progressListDict)
     user.profile.currQuestions = json.dumps(questionsIDsDict)
     user.profile.attempts = json.dumps(attemptsDict)
     user.profile.currCorrect = json.dumps(currCorrectDict)
@@ -286,6 +317,7 @@ def practice_topics_detail(request, topic):
     global activeNav;
     user = request.user
     progressDict = json.loads(user.profile.progress2)
+    progressListDict = json.loads(user.profile.progress)
     attemptsDict = json.loads(user.profile.attempts)
     currCorrectDict = json.loads(user.profile.currCorrect)
     currAnswer = json.loads(user.profile.currAnswer)
@@ -358,17 +390,22 @@ def practice_topics_detail(request, topic):
             progressDict[topic] += 10
             if (progressDict[topic]) > 100:
                 progressDict[topic] = 100
+            progressListDict[topic].append(progressDict[topic])
             currCorrectDict[topic] = "T"
             user.profile.progress2 = json.dumps(progressDict)
+            user.profile.progress = json.dumps(progressListDict)
             user.profile.currCorrect = json.dumps(currCorrectDict)
             user.profile.save()
         else:
             attemptsDict[topic] -= 1
             if attemptsDict[topic] == 0:
                 progressDict[topic]-=15
+                progressListDict[topic].append(progressDict[topic])
             if (progressDict[topic]) < 0:
                 progressDict[topic] = 0
+                progressListDict[topic][-1] = 0
             user.profile.progress2 = json.dumps(progressDict)
+            user.profile.progress = json.dumps(progressListDict)
             user.profile.attempts = json.dumps(attemptsDict)
             user.profile.save()
         return render(request, 'core/practice_topics_detail.html', getContext())
@@ -575,5 +612,4 @@ def update_profiles(request):
     # user = authenticate(username=username, password=password)
     profile.delete()
     user.delete()
-    print("hi")
     return HttpResponse()
