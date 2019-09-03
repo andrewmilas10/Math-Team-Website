@@ -5,7 +5,7 @@ end = Number(end);
 console.log(end);
 if (end == 0 || end == -1) {
     var isRestarting = true;
-    end = Date.now()+.2*60*1000;
+    end = Date.now()+30*60*1000;
 }
 
 console.log("starting timer...");
@@ -61,8 +61,9 @@ if (! Number(viewSolutions)) {
     var counter = 1;
     while (document.getElementById("answer"+counter)) {
         // if (currAnswers[counter-1])
-        if (!isRestarting && currAnswers.split(",")[counter-1].replace(" ", "") != "''" ) {
-            document.getElementById("answer"+counter).value = currAnswers.split(",")[counter-1].replace(/'/g, "");
+        if (!isRestarting && currAnswers.split("'")[2*counter-1].replace(" ", "") != "''" ) {
+            console.log(currAnswers);
+            document.getElementById("answer"+counter).value = currAnswers.split("'")[2*counter-1].replace(/'/g, "");
         }
 
         $("#answer"+counter).on('input', function(){
@@ -84,10 +85,9 @@ if (! Number(viewSolutions)) {
 } else {
     var counter = 1;
     while (document.getElementById("solutionBtn"+counter)) {
-        console.log(currAnswers.split(",")[counter-1]);
-        console.log(currAnswers.split(",")[counter-1].replace(" ", "") == "''");
-        if (currAnswers.split(",")[counter-1].replace(" ", "") != "''" ) {
-            document.getElementById("answer"+counter).value = currAnswers.split(",")[counter-1].replace(/'/g, "");
+            console.log(currAnswers.split("'")[2*counter-1]);
+        if (currAnswers.split("'")[2*counter-1].replace(" ", "") != "''" ) {
+            document.getElementById("answer"+counter).value = currAnswers.split("'")[2*counter-1].replace(/'/g, "");
         }
         document.getElementById("answer"+counter).disabled = true;
         if (Number(distribution.split(",")[counter-1])) {

@@ -22,9 +22,11 @@
 
 {% for question in questions %}
     <div class="questionList" style="position: relative">
-    {#        {% if question.calc_allowed %}#}
-            <img src="{% static 'css/calculator.png' %}" style="position: absolute; right: -10px; top: 5px" alt = "calculator allowed" width="70px" >
-{#        {% endif %}#}
+        {% if question.calc_allowed %}
+            <img src="{% static 'css/calculator.png' %}" style="position: absolute; right: -10px; bottom: 5px" alt = "calculator allowed" width="70px" >
+        {% else %}
+            <img src="{% static 'css/noCalculator.png' %}" style="position: absolute; right: -10px; bottom: 5px" alt = "calculator not allowed" width="70px" >
+        {% endif %}
         <h4 class="inlineh" style="display: block; font-weight: bold; margin-top: 20px; margin-bottom: 15px"> Question {{ forloop.counter }} </h4>
         {% if question.questionPicture %}
             <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
@@ -32,7 +34,7 @@
         {% if question.questionText %}
            <p class="left" style="font-size: 20px">{{ question.questionText|linebreaksbr }}</p>
         {% endif %}
-        <p class="left">Answer: {{ question.answer }}</p>
+{#        <p class="left">Answer: {{ question.answer }}</p>#}
         <input type="input" id="answer{{ forloop.counter }}" name="answer{{ forloop.counter }}" placeholder="Type Answer Here">
         {%  if viewSolutions %}
             <img id="correct{{ forloop.counter }}" class="img-fluid" style="position: absolute; margin-left: 20px;" src="{% static 'css/incorrect.png' %}" width="30" height="40">

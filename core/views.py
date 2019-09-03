@@ -447,13 +447,18 @@ def practice_tests_detail(request, topic):
             category = i
             break
 
-    for num in testProgress.items():
+    for num in sorted(testProgress.items(), key=lambda t: t[0], reverse=True):
         print(num[0], num[0][5:], topic)
         if (num[0][5:] == topic):
             if num[0][:4] != "RAND" and Question.objects.filter(topic__in=[topic]).filter(year = num[0][:4])[0].calc_allowed:
                 calcAllowed = "Calculator Allowed"
             elif num[0][:4] == "RAND":
-                calcAllowed = "TODO, don't know yet"
+                calcAllowed = "No Calculator"
+                # currQuestions = json.loads(user.profile.testQuestion)
+                # for questionID in currQuestions[num[0]]:
+                #     if get_object_or_404(Question, pk=questionID).calc_allowed:
+                #         calcAllowed = "Calculator"
+                #         break
             else:
                 calcAllowed = "No Calculator"
             print(str(testTime[num[0]]))

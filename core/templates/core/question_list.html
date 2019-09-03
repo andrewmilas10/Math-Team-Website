@@ -110,9 +110,11 @@
   <div class="questionList" style="position: relative">
     <br>
     <a href="{% url 'core:detail' question.id %}">
-{#        {% if question.calc_allowed %}#}
+        {% if question.calc_allowed %}
             <img src="{% static 'css/calculator.png' %}" style="position: absolute; right: -10px; bottom: 5px" alt = "calculator allowed" width="70px" >
-{#        {% endif %}#}
+        {% else %}
+            <img src="{% static 'css/noCalculator.png' %}" style="position: absolute; right: -10px; bottom: 5px" alt = "calculator not allowed" width="70px" >
+        {% endif %}
         {% if question.questionPicture %}
             <img class="img-fluid"src="{{ question.questionPicture.url }}" width="1000" height="500">
         {% endif %}
