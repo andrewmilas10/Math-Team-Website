@@ -69,7 +69,7 @@
 
           <a {% ifequal activeNav "0" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:homepage' %}">Home<span class="sr-only">(current)</span></a>
           <a {% ifequal activeNav "1" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:post_list' %}">Updates</a>
-          <a {% ifequal activeNav "2" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:question_list' %}">Problems</a>
+{#          <a {% ifequal activeNav "2" %}class="nav-link active" {% else %} class = "nav-link" {% endifequal %} href="{% url 'core:question_list' %}">Problems</a>#}
 
           <div class="dropdown">
               <a  {% ifequal activeNav "5" %}class="nav-link active dropdown-toggle" {% else %} class = "nav-link dropdown-toggle" {% endifequal %}
